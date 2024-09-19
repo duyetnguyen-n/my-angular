@@ -1,0 +1,87 @@
+<div class="m-5 container pr-8">
+  <div class="flex mb-4">
+    <div class="box-top-left mx-2 max-h-60 overflow-auto">
+      <div class="flex place-content-between">
+        <h2 class="text-xl">Các nhóm tiêu chí:</h2>
+        <a class="flex items-center" (click)="toggleForm()">Thêm</a>
+      </div>
+      <nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed">
+        <thead>
+          <tr>
+            @for (column of listOfColumns; track column.name) {
+            <th [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn" [nzFilters]="column.listOfFilter"
+              [nzFilterFn]="column.filterFn">
+              {{ column.name }}
+            </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (data of filterTable.data; track data) {
+          <tr>
+            <td>{{ data.name }}</td>
+            <td>{{ data.age }}</td>
+            <td>{{ data.address }}</td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="box-top-right mx-2 max-h-60 overflow-auto">
+      <div class="flex">
+        <h2 class="text-xl">Các nhóm tiêu chí:</h2>
+        <i class='bx bxs-doughnut-chart'></i>
+      </div>
+      <nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed">
+        <thead>
+          <tr>
+            @for (column of listOfColumns; track column.name) {
+            <th [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn" [nzFilters]="column.listOfFilter"
+              [nzFilterFn]="column.filterFn">
+              {{ column.name }}
+            </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (data of filterTable.data; track data) {
+          <tr>
+            <td>{{ data.name }}</td>
+            <td>{{ data.age }}</td>
+            <td>{{ data.address }}</td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+  <div class="box-top-right mx-2 max-h-svh overflow-auto">
+    <div class="flex">
+      <h2 class="text-xl">Các nhóm tiêu chí:</h2>
+      <i class='bx bxs-doughnut-chart'></i>
+    </div>
+    <nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed">
+      <thead>
+        <tr>
+          @for (column of listOfColumns; track column.name) {
+          <th [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn" [nzFilters]="column.listOfFilter"
+            [nzFilterFn]="column.filterFn">
+            {{ column.name }}
+          </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (data of filterTable.data; track data) {
+        <tr>
+          <td>{{ data.name }}</td>
+          <td>{{ data.age }}</td>
+          <td>{{ data.address }}</td>
+        </tr>
+        }
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+
+
