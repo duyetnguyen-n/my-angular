@@ -1,0 +1,15 @@
+<div class="back_opacity w-full h-full" *ngIf="isVisible">
+</div>
+<div class="add_new_on_page" *ngIf="isVisible">
+  <form (ngSubmit)="onSubmit(form.value)" #form="ngForm">
+    <ng-content></ng-content>
+    <div class="row-auto">
+      <div class="col-span-12 text-right p-2">
+        <button class="but-add hover:bg-sky-200 text-white py-2 px-4 rounded mr-2" type="submit">Thêm</button>
+        <button
+          class="but-cancel bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded inline-flex items-center"
+          type="button" (click)="hideForm()">Hủy</button>
+      </div>
+    </div>
+  </form>
+</div>

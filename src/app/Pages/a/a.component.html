@@ -3,85 +3,187 @@
     <div class="box-top-left mx-2 max-h-60 overflow-auto">
       <div class="flex place-content-between">
         <h2 class="text-xl">Các nhóm tiêu chí:</h2>
-        <a class="flex items-center" (click)="toggleForm()">Thêm</a>
+        <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2" (click)="toggleForm('criteriaGroup')">Thêm</a>
       </div>
-      <nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed">
-        <thead>
+      <nz-table #filterTable [nzData]="listOfCriteriaGroup" nzTableLayout="fixed">
+        <thead class="fixed">
           <tr>
-            @for (column of listOfColumns; track column.name) {
-            <th [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn" [nzFilters]="column.listOfFilter"
-              [nzFilterFn]="column.filterFn">
+            <th *ngFor="let column of listOfCriteriaGroupColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
               {{ column.name }}
             </th>
-            }
+            <th>Thao tác</th>
           </tr>
         </thead>
         <tbody>
-          @for (data of filterTable.data; track data) {
-          <tr>
+          <tr *ngFor="let data of listOfCriteriaGroup">
             <td>{{ data.name }}</td>
-            <td>{{ data.age }}</td>
-            <td>{{ data.address }}</td>
+            <td>{{ data.count }}</td>
+            <td>{{ data.role }}</td>
+            <td>
+              <a class="mr-2" href="">Sửa</a>
+              <a href="">Xóa</a>
+            </td>
           </tr>
-          }
         </tbody>
       </nz-table>
     </div>
     <div class="box-top-right mx-2 max-h-60 overflow-auto">
-      <div class="flex">
-        <h2 class="text-xl">Các nhóm tiêu chí:</h2>
-        <i class='bx bxs-doughnut-chart'></i>
+      <div class="flex place-content-between">
+        <h2 class="text-xl">Danh sách xếp hạng:</h2>
+        <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2" (click)="toggleForm('rank')">Thêm</a>
       </div>
-      <nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed">
+      <nz-table #filterTable [nzData]="listOfRank" nzTableLayout="fixed">
         <thead>
           <tr>
-            @for (column of listOfColumns; track column.name) {
-            <th [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn" [nzFilters]="column.listOfFilter"
-              [nzFilterFn]="column.filterFn">
+            <th *ngFor="let column of listOfRankColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
               {{ column.name }}
             </th>
-            }
+            <th>Thao tác</th>
           </tr>
         </thead>
         <tbody>
-          @for (data of filterTable.data; track data) {
-          <tr>
-            <td>{{ data.name }}</td>
-            <td>{{ data.age }}</td>
-            <td>{{ data.address }}</td>
+          <tr *ngFor="let rank of listOfRank">
+            <td>{{ rank.name }}</td>
+            <td>{{ rank.pointRangeStart }}</td>
+            <td>{{ rank.pointRangeEnd }}</td>
+            <td>
+              <a href="" class="mr-2">Sửa</a>
+              <a href="">Xóa</a>
+            </td>
           </tr>
-          }
         </tbody>
       </nz-table>
     </div>
   </div>
-  <div class="box-top-right mx-2 max-h-svh overflow-auto">
-    <div class="flex">
-      <h2 class="text-xl">Các nhóm tiêu chí:</h2>
-      <i class='bx bxs-doughnut-chart'></i>
+  <div class="box-top-right mx-2 max-h-80 overflow-auto">
+    <div class="flex place-content-between">
+      <h2 class="text-xl">Danh sách tiêu chí:</h2>
+      <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2" (click)="toggleForm('criteria')">Thêm</a>
     </div>
-    <nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed">
+    <nz-table #filterTable [nzData]="listOfCriteria" nzTableLayout="fixed">
       <thead>
         <tr>
-          @for (column of listOfColumns; track column.name) {
-          <th [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn" [nzFilters]="column.listOfFilter"
-            [nzFilterFn]="column.filterFn">
+          <th *ngFor="let column of listOfCriteriaColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
             {{ column.name }}
           </th>
-          }
+          <th>
+            Thao tác
+          </th>
         </tr>
       </thead>
       <tbody>
-        @for (data of filterTable.data; track data) {
-        <tr>
-          <td>{{ data.name }}</td>
-          <td>{{ data.age }}</td>
-          <td>{{ data.address }}</td>
+        <tr *ngFor="let criteria of listOfCriteria">
+          <td>{{ criteria.name | slice: 0:40 }}{{ criteria.name.length > 50 ? '...' : '' }}</td>
+          <td>{{ criteria.points }}</td>
+          <td>{{ criteria.notes | slice: 0:30 }}{{ criteria.notes.length > 20 ? '...' : '' }}</td>
+          <td>{{ getUserNameById(criteria.personCheck) }}</td>
+          <td>{{ getCriteriaGroupNameById(criteria.criteriaGroupId) }}</td>
+          <td>
+            <a href="" class="mr-2">Sửa</a>
+            <a href="">Xóa</a>
+          </td>
         </tr>
-        }
       </tbody>
     </nz-table>
   </div>
 </div>
 
+<app-fullscreenform *ngIf="isCriteriaGroupFormVisible" (formSubmit)="addCriteriaGroup()">
+  <form #form="ngForm">
+    <div class="col-span-12 p-2">
+      <label for="criteriaGroup_name" class="block mb-2 text-sm font-medium text-gray-900">Tên Nhóm:</label>
+      <input type="text" id="criteriaGroup_name" name="criteriaGroup_name" [(ngModel)] = "criteriaGroup_name"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        required>
+    </div>
+    <div class="col-span-12 p-2">
+      <label for="criteriaGroup_role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an
+        option:</label>
+      <select id="criteriaGroup_role" [(ngModel)] = "criteriaGroup_role" name = "criteriaGroup_role"
+        class="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option value="" selected>Chọn loại tiêu chí</option>
+        <option value="Cộng điểm">Cộng điểm</option>
+        <option value="Trừ điểm">Trừ điểm</option>
+      </select>
+    </div>
+  </form>
+</app-fullscreenform>
 
+<app-fullscreenform *ngIf="isRankFormVisible" (formSubmit)="addRank()">
+  <form #rankForm="ngForm">
+    <div class="col-span-12 p-2">
+      <label for="rank_name" class="block mb-2 text-sm font-medium text-gray-900">Tên Xếp Hạng:</label>
+      <input type="text" id="rank_name" name="rank_name" [(ngModel)]="rank_name"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg"
+        required>
+    </div>
+    <div class="col-span-12 p-2">
+      <label for="point_range_start" class="block mb-2 text-sm font-medium text-gray-900">Khoảng điểm:</label>
+      <div class="flex">
+        <input type="number" id="point_range_start" name="point_range_start" [(ngModel)]="point_range_start"
+          class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg" required>
+        <p class="mx-2 flex items-center">đến</p>
+        <input type="number" id="point_range_end" name="point_range_end" [(ngModel)]="point_range_end"
+          class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg" required>
+      </div>
+    </div>
+  </form>
+</app-fullscreenform>
+
+<app-fullscreenform *ngIf="isCriteriaFormVisible" (formSubmit)="addCriteria()">
+  <form #criteriaForm="ngForm">
+    <div class="grid grid-cols-12">
+      <div class="col-span-6 p-2">
+        <label for="criteria_name" class="block mb-2 text-sm font-medium text-gray-900">Tên Tiêu Chí:</label>
+        <input type="text" id="criteria_name" name="criteria_name" [(ngModel)]="criteria_name"
+          class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg" required>
+      </div>
+      <div class="col-span-6 p-2">
+        <label for="criteria_points" class="block mb-2 text-sm font-medium text-gray-900">Điểm:</label>
+        <input type="number" id="criteria_points" name="criteria_points" [(ngModel)]="criteria_points"
+          class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg" required>
+      </div>
+      <div class="col-span-12 p-2">
+        <label for="criteria_notes" class="block mb-2 text-sm font-medium text-gray-900">Ghi chú:</label>
+        <input type="text" id="criteria_notes" name="criteria_notes" [(ngModel)]="criteria_notes"
+          class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg" required>
+      </div>
+      <div class="col-span-12 p-2">
+        <label for="criteria_PersonCheck" class="block mb-2 text-sm font-medium text-gray-900">Người kiểm tra:</label>
+        <select name="criteria_PersonCheck" id="criteria_PersonCheck" [(ngModel)]="criteria_PersonCheck"
+          class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg">
+          <option *ngFor="let person of listOfUsers" [ngValue]="person.id">{{ person.name }}</option>
+        </select>
+      </div>
+      <div class="col-span-12 p-2">
+        <label for="criteria_group" class="block mb-2 text-sm font-medium text-gray-900">Nhóm tiêu chí:</label>
+        <select name="criteria_group" id="criteria_group" [(ngModel)]="criteria_group"
+          class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg">
+          <option *ngFor="let group of listOfCriteriaGroup" [ngValue]="group.id">{{ group.name }}</option>
+        </select>
+      </div>
+    </div>
+  </form>
+</app-fullscreenform>
+
+
+<app-fullscreenform *ngIf="isCriteriaGroupEditFormVisible" (formSubmit)="updateCriteriaGroup()">
+  <form #form="ngForm">
+    <div class="col-span-12 p-2">
+      <label for="criteriaGroup_name" class="block mb-2 text-sm font-medium text-gray-900">Tên Nhóm:</label>
+      <input type="text" id="criteriaGroup_name" name="criteriaGroup_name" [(ngModel)]="criteriaGroup_name"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        required>
+    </div>
+    <div class="col-span-12 p-2">
+      <label for="criteriaGroup_role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an
+        option:</label>
+      <select id="criteriaGroup_role" [(ngModel)]="criteriaGroup_role" name="criteriaGroup_role"
+        class="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:placeholder-black dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option value="" selected>Chọn loại tiêu chí</option>
+        <option value="Cộng điểm">Cộng điểm</option>
+        <option value="Trừ điểm">Trừ điểm</option>
+      </select>
+    </div>
+  </form>
+</app-fullscreenform>

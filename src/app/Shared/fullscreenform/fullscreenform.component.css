@@ -1,0 +1,32 @@
+.back_opacity {
+    position: absolute;
+    z-index: 50;
+    background-color: black;
+    opacity: 0.3;
+    top: 0;
+    overflow-y: unset;
+}
+
+.add_new_on_page {
+    position: absolute;
+    margin: 30px auto;
+    background-color: white;
+    border: 1px solid #c1c1c1;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 51;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 90%;
+    overflow-y: auto;
+}
+.but-add:hover{
+  background-color: #3b91e5ad;
+    color: white;
+    box-shadow: 0 0 20px 0 #3b91e59e;
+
+}
+.but-cancel:hover{
+  color: black;
+}
