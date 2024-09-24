@@ -1,14 +1,18 @@
 import { Routes } from '@angular/router';
-import { MainComponent } from './Pages/main/main.component';
-import { DashboardComponent } from './Pages/dashboard/dashboard.component';
+import { LoginComponent } from './Pages/login/login.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
   {
-    path: 'tieu-chi',
-    loadChildren: () => import('./Pages/a/a.routes').then(m => m.ROUTES),
+    path: '',
+    redirectTo: '/dashboard', // Redirect trang chủ đến dashboard
+    pathMatch: 'full'
   },
   {
     path: '',
-    loadChildren: () => import('./Pages/dashboard/dashboard.routes').then(m => m.ROUTES),
+    loadChildren: () => import('./Pages/main/main.routes').then(m => m.ROUTES),
+    canActivate: [AuthGuard] // Bảo vệ toàn bộ route bằng AuthGuard
   },
+  { path: '**', redirectTo: '/dashboard' } // Redirect các route không tìm thấy về dashboard
 ];

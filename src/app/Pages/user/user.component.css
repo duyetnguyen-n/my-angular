@@ -1,0 +1,13 @@
+.table-operations {
+        margin-bottom: 16px;
+      }
+
+      .table-operations > button {
+        margin-right: 8px;
+      }
+
+.box-top-left,.box-top-right {
+    border-radius: 1rem;
+    padding: 20px;
+    background: var(--light);
+}

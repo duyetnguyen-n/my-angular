@@ -1,0 +1,49 @@
+<div class="m-5 container pr-8">
+  <div class="box-top-left mx-2 max-h-60 overflow-auto mb-5">
+    <app-teach-group></app-teach-group>
+  </div>
+  <div class="box-top-right mx-2 max-h-80 overflow-auto">
+    <div class="flex place-content-between">
+      <h2 class="text-xl">Danh sách người dùng:</h2>
+      <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2" nz-button nzType="primary"
+       (click)="openAddFormUser()" >Thêm</a>
+    </div>
+    <nz-table #filterTable [nzData]="listOfUsers" nzTableLayout="fixed" [nzShowPagination]="true"
+      [nzPageSize]="pageSize" [nzFrontPagination]="true" [nzLoading]="loading"
+      (nzPageIndexChange)="onPageIndexChange($event)">
+      <thead>
+        <tr>
+          <th *ngFor="let column of listOfUserColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
+            {{ column.name }}
+          </th>
+          <th>
+            Thao tác
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of listOfDisplayData">
+          <td>
+            <div class="flex">
+              <img class="mr-2 rounded-md" *ngIf="user.avatar" [src]="'http://localhost:5238/uploads/' + user.avatar" alt="Avatar" width="40" height="40" />
+              <p class="flex items-center">{{ user.name }}</p>
+            </div>
+          </td>
+          <td>{{ user.numberPhone }}</td>
+          <td>{{ user.position }}</td>
+          <td>{{ user.mail }}</td>
+          <td>{{ getTeachGroupNameById(user.teachGroupId) }}</td>
+          <td>{{ user.point }}</td>
+          <td>
+            <div class="flex">
+              <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+                (click)="openEditFormUser(user)">Sửa</a>
+              <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded"
+               (click)="showConfirmDelete(user)" >Xóa</a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

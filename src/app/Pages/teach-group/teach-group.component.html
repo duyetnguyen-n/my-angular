@@ -1,0 +1,29 @@
+<div class="flex place-content-between">
+  <h2 class="text-xl">Các tổ dạy:</h2>
+  <button class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2" nz-button nzType="primary"
+    (click)="openAddFormTeachGroup()">Thêm</button>
+</div>
+<nz-table #filterTable [nzData]="listOfTeachGroup" nzTableLayout="fixed" [nzShowPagination]="true" [nzPageSize]="5"
+  [nzFrontPagination]="true" [nzLoading]="loading" (nzPageIndexChange)="onPageIndexChange($event)">
+  <thead class="fixed">
+    <tr>
+      <th *ngFor="let column of listOfTeachGroupColumns" [(nzSortOrder)]="column.sortOrder"
+        [nzSortFn]="column.sortFn">
+        {{ column.name }}
+      </th>
+      <th>Thao tác</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfDisplayData" [class.active]="data === selectedRow" (click)="selectedRow = data">
+      <td>{{ data.name }}</td>
+      <td>{{ data.count }}</td>
+      <td class="flex">
+        <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+          (click)="openEditFormTeachGroup(data)">Sửa</a>
+        <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded"
+          (click)="showConfirmDelete(data)">Xóa</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

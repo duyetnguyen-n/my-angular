@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; 
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 })
 export class SidebarComponent {
   sideMenuItems = [
-    { id: 1, name: 'Trang Chủ', icon: 'bx bxs-dashboard', link: '/' },
+    { id: 1, name: 'Trang Chủ', icon: 'bx bxs-dashboard', link: '/dashboard' },
     { id: 2, name: 'Người Dùng', icon: 'bx bxs-dashboard', link: '/nguoi-dung' },
     { id: 3, name: 'Tiêu Chí', icon: 'bx bxs-dashboard', link: '/tieu-chi' },
     { id: 4, name: 'Đánh Giá', icon: 'bx bxs-dashboard', link: '/danh-gia' },

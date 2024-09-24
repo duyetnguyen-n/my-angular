@@ -1,0 +1,15 @@
+<app-fullscreenform (formSubmit)="editCriteriaGroup()">
+    <div class="col-span-12 p-2">
+        <label for="criteriaGroup_name" class="block mb-2 text-sm font-medium text-gray-900">Tên Nhóm:</label>
+        <input type="text" id="criteriaGroup_name" [(ngModel)]="criteriaGroup_name"
+            class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+    </div>
+    <div class="col-span-12 p-2">
+        <label for="criteriaGroup_role" class="block mb-2 text-sm font-medium text-gray-900">Loại:</label>
+        <select id="criteriaGroup_role" [(ngModel)]="criteriaGroup_role"
+            class="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+            <option value="Cộng điểm">Cộng điểm</option>
+            <option value="Trừ điểm">Trừ điểm</option>
+        </select>
+    </div>
+</app-fullscreenform>

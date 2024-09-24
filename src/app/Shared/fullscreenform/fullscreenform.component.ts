@@ -11,20 +11,9 @@ import { CommonModule } from '@angular/common';
 
 })
 export class FullscreenFormComponent {
-  isVisible: boolean = false;
-
   @Output() formSubmit = new EventEmitter<any>();
-
-  showForm() {
-    this.isVisible = true;
-  }
-
-  hideForm() {
-    this.isVisible = false;
-  }
 
   onSubmit(formValue: any) {
     this.formSubmit.emit(formValue);
-    this.hideForm();
   }
 }

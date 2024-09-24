@@ -1,0 +1,35 @@
+<div class="flex place-content-between">
+  <h2 class="text-xl">Danh sách xếp hạng:</h2>
+  <button class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+   nz-button nzType="primary"
+   (click)="openAddFormRank()">Thêm</button>
+</div>
+<nz-table #filterTable
+  [nzData]="listOfRank"
+  nzTableLayout="fixed"
+  [nzShowPagination]="true"
+  [nzPageSize]="5"
+  [nzFrontPagination]="true"
+  [nzLoading]="loading"
+  (nzPageIndexChange)="onPageIndexChange($event)"
+  >
+  <thead>
+    <tr>
+      <th *ngFor="let column of listOfRankColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
+        {{ column.name }}
+      </th>
+      <th>Thao tác</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let rank of listOfRankDataDisplay">
+      <td>{{ rank.name }}</td>
+      <td>{{ rank.pointRangeStart }}</td>
+      <td>{{ rank.pointRangeEnd }}</td>
+      <td class="flex">
+        <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2" (click)="openEditFormRank(rank)">Sửa</a>
+        <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded" (click)="showConfirmDelete(rank)" >Xóa</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

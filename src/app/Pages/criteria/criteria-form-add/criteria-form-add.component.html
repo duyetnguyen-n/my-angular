@@ -1,0 +1,36 @@
+<app-fullscreenform (formSubmit)="addCriteria()">
+  <div class="grid grid-cols-12">
+    <div class="col-span-6 p-2">
+      <label for="criteria_name" class="block mb-2 text-sm font-medium text-gray-900">Tên Tiêu Chí:</label>
+      <input type="text" id="criteria_name" name="criteria_name" [(ngModel)]="criteria_name"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg"
+        required>
+    </div>
+    <div class="col-span-6 p-2">
+      <label for="criteria_points" class="block mb-2 text-sm font-medium text-gray-900">Điểm:</label>
+      <input type="number" id="criteria_points" name="criteria_points" [(ngModel)]="criteria_points"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg"
+        required>
+    </div>
+    <div class="col-span-12 p-2">
+      <label for="criteria_notes" class="block mb-2 text-sm font-medium text-gray-900">Ghi chú:</label>
+      <input type="text" id="criteria_notes" name="criteria_notes" [(ngModel)]="criteria_notes"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg"
+        required>
+    </div>
+    <div class="col-span-12 p-2">
+      <label for="criteria_PersonCheck" class="block mb-2 text-sm font-medium text-gray-900">Người kiểm tra:</label>
+      <select name="criteria_PersonCheck" id="criteria_PersonCheck" [(ngModel)]="criteria_PersonCheck"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg">
+        <option *ngFor="let person of listOfUsers" [ngValue]="person.id">{{ person.name }}</option>
+      </select>
+    </div>
+    <div class="col-span-12 p-2">
+      <label for="criteria_group" class="block mb-2 text-sm font-medium text-gray-900">Nhóm tiêu chí:</label>
+      <select name="criteria_group" id="criteria_group" [(ngModel)]="criteria_group"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg">
+        <option *ngFor="let group of listOfCriteriaGroup" [ngValue]="group.id">{{ group.name }}</option>
+      </select>
+    </div>
+  </div>
+</app-fullscreenform>

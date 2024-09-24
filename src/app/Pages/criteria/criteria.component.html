@@ -1,0 +1,56 @@
+<div class="m-5 container pr-8">
+  <div class="flex mb-4">
+    <div class="box-top-left mx-2 max-h-60 overflow-auto">
+      <app-criteria-group></app-criteria-group>
+    </div>
+    <div class="box-top-left mx-2 max-h-60 overflow-auto">
+      <app-rank></app-rank>
+    </div>
+  </div>
+  <div class="box-top-right mx-2 max-h-80 overflow-auto">
+    <div class="flex place-content-between">
+      <h2 class="text-xl">Danh sách tiêu chí:</h2>
+      <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+      nz-button nzType="primary"
+      (click)="openAddFormCriteria()">Thêm</a>
+    </div>
+    <nz-table #filterTable
+    [nzData]="listOfCriteria"
+    nzTableLayout="fixed"
+    [nzShowPagination]="true"
+    [nzPageSize]="5"
+    [nzFrontPagination]="true"
+    [nzLoading]="loading"
+    (nzPageIndexChange)="onPageIndexChange($event)">
+      <thead>
+        <tr>
+          <th *ngFor="let column of listOfCriteriaColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
+            {{ column.name }}
+          </th>
+          <th>
+            Thao tác
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let criteria of listOfDisplayData">
+          <td>{{ criteria.name | slice: 0:40 }}{{ criteria.name.length > 50 ? '...' : '' }}</td>
+          <td>{{ criteria.points }}</td>
+          <td>{{ criteria.notes | slice: 0:30 }}{{ criteria.notes.length > 20 ? '...' : '' }}</td>
+          <td>{{ getUserNameById(criteria.personCheck) }}</td>
+          <td *ngIf="listOfCriteriaGroup.length > 0">{{ getCriteriaGroupNameById(criteria.criteriaGroupId) }}</td>
+          <td *ngIf="listOfCriteriaGroup.length === 0">Loading...</td>
+          <td>
+            <div class="flex">
+              <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+                (click)="openEditFormCriteria(criteria)">Sửa</a>
+              <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded"
+                (click)="showConfirmDelete(criteria)">Xóa</a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+

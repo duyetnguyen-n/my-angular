@@ -1,0 +1,18 @@
+.login-form {
+    border: 1px solid var(--blue);
+    padding: 30px 50px;
+    border-radius: 20px;
+    background-color: #f3f6ff;
+}
+
+.login-form-margin {
+  margin-bottom: 16px;
+}
+
+.login-form-forgot {
+  float: right;
+}
+
+.login-form-button {
+  width: 100%;
+}

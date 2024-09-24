@@ -1,0 +1,21 @@
+<app-fullscreenform (formSubmit)="editRank()">
+  <div class="col-span-12 p-2">
+    <label for="rank_name" class="block mb-2 text-sm font-medium text-gray-900">Tên Xếp Hạng:</label>
+    <input type="text" id="rank_name" name="rank_name" [(ngModel)]="Rank_name"
+      class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg"
+      required>
+  </div>
+  <div class="col-span-12 p-2">
+    <label for="point_range_start" class="block mb-2 text-sm font-medium text-gray-900">Khoảng điểm:</label>
+    <div class="flex">
+      <input type="number" id="point_range_start" name="point_range_start" [(ngModel)]="pointRangeStart"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg"
+        required>
+      <p class="mx-2 flex items-center">đến</p>
+      <input type="number" id="point_range_end" name="point_range_end" [(ngModel)]="pointRangeEnd"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg"
+        required>
+    </div>
+  </div>
+
+</app-fullscreenform>
