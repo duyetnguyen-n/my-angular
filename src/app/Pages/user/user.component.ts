@@ -52,6 +52,8 @@ export class UserComponent implements OnInit {
   pageIndex = 1;
   pageSize = 5;
   listOfTeachGroups: TeachGroup[] = [];
+  selectedTeachGroupId: string | null = null; // Thêm thuộc tính này để lưu ID của nhóm được chọn
+
 
   getTeachGroupNameById(teachGroupId: string): string {
     const teachGroup = this.listOfTeachGroups.find(tg => tg.id === teachGroupId);
@@ -121,7 +123,14 @@ listOfUserColumns: ColumnItem[] = [
   updateDisplayData(): void {
     const startIndex = (this.pageIndex - 1) * this.pageSize;
     const endIndex = this.pageIndex * this.pageSize;
-    this.listOfDisplayData = this.listOfUsers.slice(startIndex, endIndex);
+    // Nếu không có tổ dạy nào được chọn, hiển thị tất cả người dùng
+    if (this.selectedTeachGroupId === null) {
+      this.listOfDisplayData = this.listOfUsers.slice(startIndex, endIndex);
+    } else {
+      // Nếu có tổ dạy được chọn, lọc người dùng theo tổ dạy
+      const filteredUsers = this.listOfUsers.filter(user => user.teachGroupId === this.selectedTeachGroupId);
+      this.listOfDisplayData = filteredUsers.slice(startIndex, endIndex);
+    }
   }
 
   onPageIndexChange(pageIndex: number): void {

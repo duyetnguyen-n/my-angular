@@ -1,6 +1,6 @@
 <div class="m-5 container pr-8">
   <div class="box-top-left mx-2 max-h-60 overflow-auto mb-5">
-    <app-teach-group></app-teach-group>
+    <app-teach-group (teachGroupSelected)="selectedTeachGroupId = $event; updateDisplayData()"></app-teach-group>
   </div>
   <div class="box-top-right mx-2 max-h-80 overflow-auto">
     <div class="flex place-content-between">

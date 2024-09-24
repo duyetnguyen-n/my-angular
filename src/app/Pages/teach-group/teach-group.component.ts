@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Output,EventEmitter } from '@angular/core';
 import { NzTableFilterFn, NzTableModule, NzTableFilterList, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,7 +30,8 @@ interface ColumnItem {
   providers: [NzModalService]
 })
 export class TeachGroupComponent implements OnInit {
-  selectedRow: any = null;
+  @Output() teachGroupSelected = new EventEmitter<string | null>();
+  selectedTeachGroupId: string | null = null; // Để lưu ID của tổ dạy đang xem
   loading = true;
   listOfTeachGroup: TeachGroup[] = [];
   listOfDisplayData: TeachGroup[] = [];
@@ -55,6 +56,15 @@ export class TeachGroupComponent implements OnInit {
   ];
 
   constructor(private service: LinkedService, private modal: NzModalService) { }
+
+  toggleViewTeachGroup(teachGroup: TeachGroup): void {
+    if (this.selectedTeachGroupId === teachGroup.id) {
+      this.selectedTeachGroupId = null;
+    } else {
+      this.selectedTeachGroupId = teachGroup.id;
+    }
+    this.teachGroupSelected.emit(this.selectedTeachGroupId); // Truyền ID của nhóm được chọn
+  }
 
   reloadListTeachGroup() {
     this.loading = true;

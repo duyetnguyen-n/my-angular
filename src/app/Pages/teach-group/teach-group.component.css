@@ -14,3 +14,10 @@
 .active{
     background-color: aliceblue;
 }
+.blue{
+  background-color: var(--blue);
+}
+
+.red{
+  background-color: red;
+}
