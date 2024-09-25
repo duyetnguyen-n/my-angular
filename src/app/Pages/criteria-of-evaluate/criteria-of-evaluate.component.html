@@ -1,0 +1,32 @@
+<div class="m-5 container pr-8">
+  <div class="box-top-right mx-2 max-h-80 overflow-auto">
+    <div class="flex place-content-between">
+      <h2 class="text-xl">Danh sách tiêu chí:</h2>
+    </div>
+    <nz-table #rowSelectionTable nzShowSizeChanger [nzData]="listOfCriteria"
+      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+      <thead>
+        <tr>
+          <th [nzSelections]="listOfSelection" [(nzChecked)]="checked" [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="onAllChecked($event)"></th>
+          <th>Tên</th>
+          <th>Điểm</th>
+          <th>Ghi Chú</th>
+          <th>Người Kiểm Tra</th>
+          <th>Nhóm Tiêu Chí</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of rowSelectionTable.data; trackBy: trackById">
+          <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+          <td>{{ data.name | slice: 0:40 }}{{ data.name.length > 50 ? '...' : '' }}</td>
+          <td>{{ data.points }}</td>
+          <td>{{ data.notes }}</td>
+          <td>{{ data.personCheck }}</td>
+          <td>{{ getCriteriaGroupNameById(data.criteriaGroupId) }}</td>
+
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

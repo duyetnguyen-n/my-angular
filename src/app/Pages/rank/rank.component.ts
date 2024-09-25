@@ -145,6 +145,8 @@ export class RankComponent implements OnInit {
               resolve();
             },
             error => {
+              const errorMessage = error.error?.message || 'Đã xảy ra lỗi không xác định';
+              alert(errorMessage); // Hiển thị thông báo lỗi
               console.error('Error:', error);
               reject(); // Nếu có lỗi xảy ra
             }

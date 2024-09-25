@@ -1,0 +1,40 @@
+<div class="m-5 container pr-8">
+  <div class="box-top-right m-2 max-h-svh overflow-auto">
+    <div class="flex place-content-between">
+      <h2 class="text-xl">Danh sách lịch sử:</h2>
+      <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded" (click)="showConfirmDeleteAll()">Xóa
+        Hết</a>
+    </div>
+    <nz-table #rowSelectionTable nzShowSizeChanger [nzData]="listOfLog"
+      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+      <thead>
+        <tr>
+          <th [nzSelections]="listOfSelection" [(nzChecked)]="checked" [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="onAllChecked($event)"></th>
+          <th>Tên Người Dùng</th>
+          <th>Hành Động</th>
+          <th>Thời Điểm</th>
+          <th>Trạng Thái</th>
+          <th>Mô tả</th>
+          <th>Thao Tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of rowSelectionTable.data; trackBy: trackById">
+          <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+          <td>{{ getUserNameById(data.userId) }}</td>
+          <td>{{ data.action }}</td>
+          <td>{{ data.timeStamp | date: 'short' }}</td>
+          <td>{{ data.status }}</td>
+          <td>{{ data.description }}</td>
+          <td>
+            <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded"
+              (click)="showConfirmDelete(data)">Xóa</a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+
+  </div>
+</div>

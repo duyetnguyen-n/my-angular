@@ -9,7 +9,7 @@ interface CriteriaGroup {
 }
 interface User {
   id: string;
-  name: string;
+  position: string;
 }
 @Component({
   selector: 'app-criteria-form-add',

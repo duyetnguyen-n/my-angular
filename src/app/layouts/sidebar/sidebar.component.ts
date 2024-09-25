@@ -13,7 +13,7 @@ export class SidebarComponent {
     { id: 1, name: 'Trang Chủ', icon: 'bx bxs-dashboard', link: '/dashboard' },
     { id: 2, name: 'Người Dùng', icon: 'bx bxs-dashboard', link: '/nguoi-dung' },
     { id: 3, name: 'Tiêu Chí', icon: 'bx bxs-dashboard', link: '/tieu-chi' },
-    { id: 4, name: 'Đánh Giá', icon: 'bx bxs-dashboard', link: '/danh-gia' },
+    { id: 4, name: 'Xếp Hạng', icon: 'bx bxs-dashboard', link: '/xep-hang' },
     { id: 5, name: 'Lịch Sử', icon: 'bx bxs-dashboard', link: '/lich-su' }
   ];
 

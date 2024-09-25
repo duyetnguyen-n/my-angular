@@ -1,0 +1,98 @@
+<div class="info box-top-left m-5 overflow-auto max-h-96">
+  <div class="flex items-center">
+    <div class="mr-10">
+      <img class="image-user bg-slate-500 h-60 w-60 rounded-full" *ngIf="UserInfo.avatar" [src]="'http://localhost:5238/uploads/' + UserInfo.avatar" alt="Avatar">
+    </div>
+    <div class="align-middle space-y-3">
+      <h1 class="text-6xl blue mb-8">{{ UserInfo.name }}</h1>
+      <div class="flex items-center">
+        <i class='bx bxs-phone mr-2'></i>
+        <h2 class="italic">Số điện thoại: {{UserInfo.numberPhone}} </h2>
+      </div>
+      <div class="flex items-center">
+        <i class='bx bxs-envelope mr-2'></i>
+        <h2 class="italic">Email: {{UserInfo.mail}}</h2>
+      </div>
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center">
+          <i class='bx bxs-cake mr-2'></i>
+          <p class="italic">Tuổi: {{UserInfo.age}} </p>
+        </div>
+        <div class="flex items-center">
+          <i class='bx bxs-mars mr-2'></i>
+          <p class="italic">Giới Tính: {{UserInfo.gender}} </p>
+        </div>
+        <div class="flex items-center">
+          <i class='bx bxs-mars mr-2'></i>
+          <p class="italic">Điểm: {{UserInfo.point}} </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="info box-top-left m-5 overflow-auto max-h-96">
+  <h2 class="text-2xl my-4 blue">Thông tin tài khoản</h2>
+  <div class="flex">
+    <p>Tài Khoản : </p>
+    <p class="ml-5"> {{UserInfo.numberPhone}} </p>
+  </div>
+  <div class="flex">
+    <p>Quyền Hạn : </p>
+    <p class="ml-5"> {{UserInfo.position}} </p>
+  </div>
+  <div class="flex">
+    <p>Mật Khẩu : </p>
+    <a class="ml-5 flex items-center but-add hover:bg-sky-200 text-white px-3 max-w-40 rounded mr-2" nz-button
+      nzType="primary" href="">Đổi mật khẩu</a>
+  </div>
+</div>
+<div class="info box-top-left m-5 overflow-auto max-h-96">
+  <div class="flex place-content-between">
+    <h2 class="text-2xl my-4 blue">Danh sách tiêu chí:</h2>
+    <div class="flex items-center">
+      <a class=" but-add hover:bg-sky-200 text-white px-5 py-1 rounded" nz-button nzType="primary"
+        (click)="openAddFormEvaluate()">Thêm</a>
+    </div>
+  </div>
+  <nz-table #filterTable
+    [nzData]="listOfEvaluate"
+    nzTableLayout="fixed"
+    [nzShowPagination]="true"
+    [nzPageSize]="5"
+    [nzFrontPagination]="true"
+    [nzLoading]="loading"
+    (nzPageIndexChange)="onPageIndexChange($event)">
+    <thead>
+      <tr>
+        <th *ngFor="let column of listOfEvaluateColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
+          {{ column.name }}
+        </th>
+        <th>
+          Thao tác
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let eva of listOfDisplayData">
+        <td>{{ eva.name | slice: 0:40 }}{{ eva.name.length > 50 ? '...' : '' }}</td>
+        <td>{{ getRankNameById(eva.rankId) }}</td>
+        <td>{{ eva.totalPointSubstraction }}</td>
+        <td>{{ eva.totalPointAddition }}</td>
+        <td>{{ eva.totalPoint }}</td>
+        <td>{{ eva.stt }}</td>
+        <td>{{ eva.from }}</td>
+        <td>{{ eva.to }}</td>
+
+        <td>
+          <div class="flex">
+            <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+             (click)="openEditFormEvaluate(eva)" >Sửa</a>
+            <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded"
+              >Xóa</a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

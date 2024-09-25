@@ -10,7 +10,7 @@ export const ROUTES: Routes = [
       {
         path: 'dashboard',
         loadChildren: () => import('../dashboard/dashboard.routes').then(m => m.ROUTES),
-        canActivate: [AuthGuard] 
+        canActivate: [AuthGuard]
       },
       {
         path: 'tieu-chi',
@@ -23,9 +23,19 @@ export const ROUTES: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'lich-su',
+        loadChildren: () => import('../log/log.routes').then(m => m.ROUTES),
+        canActivate: [AuthGuard]
+      },
+      {
         path: '',
-        redirectTo: 'dashboard', // Redirect từ root về dashboard
+        redirectTo: 'dashboard',
         pathMatch: 'full'
+      },
+      {
+        path: 'nguoi-dung/detail-user/:id',
+        loadChildren: () => import('../detail-user/detail-user.routes').then(m => m.ROUTES),
+        canActivate: [AuthGuard]
       }
     ]
   }

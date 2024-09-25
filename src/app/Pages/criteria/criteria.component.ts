@@ -17,15 +17,13 @@ interface Criteria {
   notes: string;
   personCheck: string;
   criteriaGroupId: string;
+
 }
 interface CriteriaGroup {
   id: string;
   name: string;
 }
-interface User {
-  id: string;
-  name: string;
-}
+
 
 interface ColumnItem {
   name: string;
@@ -51,12 +49,7 @@ export class CriteriaComponent implements OnInit {
   pageSize = 5;
   Criteria: any;
   listOfCriteriaGroup: CriteriaGroup[] = [];
-  listOfUsers: User[] = [];
 
-  getUserNameById(userId: string): string {
-    const user = this.listOfUsers.find(user => user.id === userId);
-    return user ? user.name : 'Unknown User';
-  }
 
   getCriteriaGroupNameById(criteriaGroupId: string): string {
   if (!criteriaGroupId) return 'Unknown Group'; // Xử lý giá trị không hợp lệ
@@ -150,11 +143,7 @@ export class CriteriaComponent implements OnInit {
   });
 }
 
-  reloadListUsers() {
-    this.service.takeListUser().subscribe(data => {
-      this.listOfUsers = data;
-    });
-  }
+
 
   openEditFormCriteria(data: Criteria) {
   const modalRef = this.modal.create({
@@ -198,10 +187,13 @@ export class CriteriaComponent implements OnInit {
         new Promise((resolve, reject) => {
           this.service.deleteCriteria(data.id).subscribe(
             res => {
-              this.reloadListCriteria(); // Tải lại danh sách sau khi xóa thành công
+              alert(res.message);
+              this.reloadListCriteria();
               resolve();
             },
             error => {
+              const errorMessage = error.error?.message || 'Đã xảy ra lỗi không xác định';
+              alert(errorMessage); // Hiển thị thông báo lỗi
               console.error('Error:', error);
               reject(); // Nếu có lỗi xảy ra
             }
@@ -213,7 +205,6 @@ export class CriteriaComponent implements OnInit {
   ngOnInit(): void {
     this.reloadListCriteria();
     this.reloadListCriteriaGroup();
-    this.reloadListUsers();
   }
 
 }

@@ -98,7 +98,7 @@ export class LinkedService {
       })
     );
   }
-  takeUser(id: any): Observable<any[]> {
+  takeUser(id: any): Observable<any> {
     return this.http.get<any>(`${this.APIUrl}/User/${id}`);
   }
 
@@ -138,5 +138,55 @@ export class LinkedService {
 
   deleteTeachGroup(id: any): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/TeachGroup/${id}`);
+  }
+
+  // Các phương thức liên quan đến Log
+  takeListLog(): Observable<any[]> {
+    return this.http.get<ApiResponse<any[]>>(`${this.APIUrl}/Log`).pipe(
+      map(response => response.data || []),
+      catchError(error => {
+        console.error('Error fetching log list:', error);
+        return of([]); // Trả về mảng rỗng nếu có lỗi
+      })
+    );
+  }
+
+  deleteLog(id: any): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/Log/${id}`);
+  }
+  deleteAllLog(id: any): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/Log/${id}`);
+  }
+  deleteMultipleLogs(ids: string[]): Observable<any> {
+  return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/Log/delete-multiple`, { body: ids });
+  }
+  // Các phương thức liên quan đến Evaluate
+  takeListEvaluate(): Observable<any[]> {
+    return this.http.get<ApiResponse<any[]>>(`${this.APIUrl}/Evaluate/all`).pipe(
+      map(response => response.data || []),
+      catchError(error => {
+        console.error('Error fetching log list:', error);
+        return of([]);
+      })
+    );
+  }
+  takeListCriteriaOfEvaluate(id: string): Observable<any[]> {
+    return this.http.get<ApiResponse<any[]>>(`${this.APIUrl}/CriteriaOfAEvaluation/${id}`).pipe(
+      map(response => response.data || []),
+      catchError(error => {
+        console.error('Error fetching log list:', error);
+        return of([]);
+      })
+    );
+  }
+
+  addEvaluate(data: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.APIUrl}/Evaluate`, data);
+  }
+  updateEvaluate(data: any): Observable<ApiResponse<any>> {
+    return this.http.put<ApiResponse<any>>(`${this.APIUrl}/Evaluate`, data);
+  }
+  deleteEvaluate(id: any): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/Evaluate/${id}`);
   }
 }

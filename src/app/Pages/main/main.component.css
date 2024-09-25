@@ -134,3 +134,9 @@ body {
   transition: color 0.5s;
 }
 
+.blue{
+  color: var(--blue)
+}
+.bg-bllue{
+  background-color: var(--blue)
+}

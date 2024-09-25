@@ -7,6 +7,7 @@ import { LinkedService } from '../../linked.service';
 import { UserFormAddComponent } from './user-form-add/user-form-add.component';
 import { UserFormEditComponent } from './user-form-edit/user-form-edit.component';
 import { TeachGroupComponent } from '../teach-group/teach-group.component';
+import {ActivatedRoute, RouterModule} from '@angular/router';
 
 interface User {
   id: string;
@@ -40,7 +41,7 @@ interface ColumnItem {
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [NzTableModule, CommonModule, FormsModule, ReactiveFormsModule, TeachGroupComponent],
+  imports: [NzTableModule,RouterModule, CommonModule, FormsModule, ReactiveFormsModule, TeachGroupComponent],
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css'],
   providers: [NzModalService]
@@ -209,6 +210,8 @@ listOfUserColumns: ColumnItem[] = [
               resolve();
             },
             error => {
+              const errorMessage = error.error?.message || 'Đã xảy ra lỗi không xác định';
+              alert(errorMessage); // Hiển thị thông báo lỗi
               console.error('Error:', error);
               reject();
             }

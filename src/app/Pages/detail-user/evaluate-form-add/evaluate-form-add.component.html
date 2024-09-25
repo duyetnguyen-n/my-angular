@@ -1,0 +1,24 @@
+<app-fullscreenform (formSubmit)="addevaluate()">
+  <div class="grid grid-cols-12">
+    <div class="col-span-12 p-2">
+      <label for="evaluate_name" class="block mb-2 text-sm font-medium text-gray-900">Tên Đánh Giá:</label>
+      <select name="evaluate_name" id="evaluate_name" [(ngModel)]="evaluate_name" (change)="onEvaluateChange()"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg">
+        <option value="Đánh giá học kì 1">Đánh giá học kì 1</option>
+        <option value="Đánh giá học kì 2">Đánh giá học kì 2</option>
+      </select>
+    </div>
+    <div class="col-span-6 p-2">
+      <label for="evaluate_from" class="block mb-2 text-sm font-medium text-gray-900">Từ Ngày:</label>
+      <input type="date" id="evaluate_from" name="evaluate_from" [(ngModel)]="evaluate_from"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg"
+        readonly>
+    </div>
+    <div class="col-span-6 p-2">
+      <label for="evaluate_to" class="block mb-2 text-sm font-medium text-gray-900">Đến Ngày:</label>
+      <input type="date" id="evaluate_to" name="evaluate_to" [(ngModel)]="evaluate_to"
+        class="bg-gray-50 w-full border py-2 px-4 leading-tight min-w border-gray-300 text-gray-900 text-sm rounded-lg"
+        readonly>
+    </div>
+  </div>
+</app-fullscreenform>

@@ -37,7 +37,7 @@
           <td>{{ criteria.name | slice: 0:40 }}{{ criteria.name.length > 50 ? '...' : '' }}</td>
           <td>{{ criteria.points }}</td>
           <td>{{ criteria.notes | slice: 0:30 }}{{ criteria.notes.length > 20 ? '...' : '' }}</td>
-          <td>{{ getUserNameById(criteria.personCheck) }}</td>
+          <td>{{ criteria.personCheck }}</td>
           <td *ngIf="listOfCriteriaGroup.length > 0">{{ getCriteriaGroupNameById(criteria.criteriaGroupId) }}</td>
           <td *ngIf="listOfCriteriaGroup.length === 0">Loading...</td>
           <td>

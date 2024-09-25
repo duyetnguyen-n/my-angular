@@ -20,7 +20,7 @@
       <td>{{ data.count }}</td>
       <td class="flex">
         <a class="flex items-center hover:bg-sky-200 text-white px-3 rounded mr-2" (click)="toggleViewTeachGroup(data)"
-          [ngClass]="{'red': selectedTeachGroupId === data.id, 'blue': selectedTeachGroupId !== data.id}">
+          [ngClass]="{'red': selectedTeachGroupId === data.id, 'bg-bllue': selectedTeachGroupId !== data.id}">
           {{ selectedTeachGroupId === data.id ? 'Hủy' : 'Xem' }}
         </a>
         <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
