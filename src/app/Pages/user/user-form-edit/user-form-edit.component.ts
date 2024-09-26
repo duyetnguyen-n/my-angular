@@ -26,16 +26,15 @@ export class UserFormEditComponent implements OnInit {
   constructor(private service: LinkedService, private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.reloadListTeachGroup(); // Tải danh sách nhóm giảng dạy
+    this.reloadListTeachGroup();
   }
-onFileSelected(event: any): void {
-  const file = event.target.files[0];
-  if (file) {
-    this.selectedFile = file;
-    this.userForm.avatarURL = URL.createObjectURL(file); // Nếu bạn muốn hiển thị ảnh
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      this.userForm.avatarURL = URL.createObjectURL(file);
+    }
   }
-}
-
 
   editUser() {
   const formData = new FormData();
@@ -53,7 +52,7 @@ onFileSelected(event: any): void {
   if (this.selectedFile) {
     formData.append('avatar', this.selectedFile);
   } else {
-    formData.append('avatar', this.userForm.avatar); 
+    formData.append('avatar', this.userForm.avatar);
   }
 
   this.service.updateUser(formData).subscribe(res => {

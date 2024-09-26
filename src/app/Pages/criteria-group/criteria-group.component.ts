@@ -6,6 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { CriteriaGroupFormAddComponent } from './criteria-group-form-add/criteria-group-form-add.component';
 import { LinkedService } from '../../linked.service';
 import { CriteriaGroupFormEditComponent } from './criteria-group-form-edit/criteria-group-form-edit.component';
+import { AuthService } from '../../Services/auth.service';
 
 interface CriteriaGroup {
   id: string;
@@ -61,7 +62,13 @@ export class CriteriaGroupComponent implements OnInit {
     }
   ];
 
-  constructor(private service: LinkedService, private modal: NzModalService) { }
+  constructor(private service: LinkedService,
+    private modal: NzModalService,
+    private authService: AuthService) { }
+  userPosition: string | null = null;
+  canEditOrDelete(): boolean {
+    return this.userPosition === 'Admin';
+  }
 
   reloadListCriteriaGroup() {
     this.loading = true;
@@ -157,5 +164,6 @@ export class CriteriaGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.reloadListCriteriaGroup();
+    this.userPosition = this.authService.getUserPosition();
   }
 }

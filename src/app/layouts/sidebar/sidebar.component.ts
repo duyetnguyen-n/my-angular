@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../Services/auth.service'; // Đảm bảo đúng đường dẫn đến AuthService
+
 @Component({
+
   selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, RouterModule],
@@ -19,7 +22,7 @@ export class SidebarComponent {
 
   activeIndex: number = 1;
 
-  constructor() {
+  constructor(private authService: AuthService) {
     if (this.isBrowser()) {
       const savedIndex = localStorage.getItem('activeIndex');
       this.activeIndex = savedIndex ? +savedIndex : 1;
@@ -31,6 +34,9 @@ export class SidebarComponent {
     if (this.isBrowser()) {
       localStorage.setItem('activeIndex', index.toString());
     }
+  }
+  onLogout(): void {
+    this.authService.logout();
   }
 
   isBrowser(): boolean {

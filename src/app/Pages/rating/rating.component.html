@@ -1,0 +1,38 @@
+<div class="box-top-right mx-2 max-h-full m-3 overflow-auto">
+  <div class="flex place-content-center">
+    <h2 class="text-4xl blue">Bảng Xếp Hạng</h2>
+
+  </div>
+  <nz-table #filterTable [nzData]="listOfUsers" nzTableLayout="fixed" [nzShowPagination]="true" [nzPageSize]="pageSize"
+    [nzFrontPagination]="true" [nzLoading]="loading" (nzPageIndexChange)="onPageIndexChange($event)">
+    <thead>
+      <tr>
+        <th>Xếp hạng</th>
+        <th *ngFor="let column of listOfUserColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
+          {{ column.name }}
+        </th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of listOfDisplayData">
+        <td>{{ user.rank }}</td>
+        <td>
+          <div class="flex">
+            <img class="mr-2 rounded-md" *ngIf="user.avatar" [src]="'http://localhost:5238/uploads/' + user.avatar"
+              alt="Avatar" width="40" height="40" />
+            <p class="flex items-center">{{ user.name }}</p>
+          </div>
+        </td>
+        <td>{{ user.numberPhone }}</td>
+        <td>{{ user.position }}</td>
+        <td>{{ user.mail }}</td>
+        <td>{{ getTeachGroupNameById(user.teachGroupId) }}</td>
+        <td>{{ user.points }}</td>
+       
+
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+

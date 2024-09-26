@@ -1,6 +1,6 @@
 <div class="flex place-content-between">
   <h2 class="text-xl">Các nhóm tiêu chí:</h2>
-  <button class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+  <button *ngIf="canEditOrDelete()" class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
    nz-button nzType="primary"
    (click)="openAddFormCriteriaGroup()">Thêm</button>
 </div>
@@ -20,7 +20,7 @@
         >
         {{ column.name }}
       </th>
-      <th>Thao tác</th>
+      <th *ngIf="canEditOrDelete()">Thao tác</th>
     </tr>
   </thead>
   <tbody>
@@ -28,9 +28,12 @@
       <td>{{ data.name }}</td>
       <td>{{ data.count }}</td>
       <td>{{ data.role }}</td>
-      <td class="flex">
-        <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2" (click)="openEditFormCriteriaGroup(data)">Sửa</a>
-        <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded" (click)="showConfirmDelete(data)">Xóa</a>
+      <td *ngIf="canEditOrDelete()">
+        <div class="flex">
+          <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+            (click)="openEditFormCriteriaGroup(data)">Sửa</a>
+          <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded" (click)="showConfirmDelete(data)">Xóa</a>
+        </div>
       </td>
     </tr>
   </tbody>

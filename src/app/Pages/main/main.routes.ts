@@ -38,6 +38,11 @@ export const ROUTES: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'xep-hang',
+        loadChildren: () => import('../rating/rating.routes').then(m => m.ROUTES),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'nguoi-dung/danh-gia/:id',
         loadChildren: () => import('../criteria-of-evaluate/criteria-of-evaluate.routes').then(m => m.ROUTES),
         canActivate: [AuthGuard]

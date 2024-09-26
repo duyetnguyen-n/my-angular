@@ -34,7 +34,7 @@ export class CriteriaFormAddComponent implements OnInit {
     if (this.criteria_name && this.criteria_notes && this.criteria_PersonCheck && this.criteria_group) {
       const val = {
         Name: this.criteria_name,
-        Point: this.criteria_points,
+        Points: this.criteria_points,
         Notes: this.criteria_notes,
         PersonCheck: this.criteria_PersonCheck,
         CriteriaGroupId: this.criteria_group,

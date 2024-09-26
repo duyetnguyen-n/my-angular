@@ -1,6 +1,6 @@
 <div class="flex place-content-between">
   <h2 class="text-xl">Danh sách xếp hạng:</h2>
-  <button class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+  <button *ngIf="canEditOrDelete()" class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
    nz-button nzType="primary"
    (click)="openAddFormRank()">Thêm</button>
 </div>
@@ -18,7 +18,7 @@
       <th *ngFor="let column of listOfRankColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
         {{ column.name }}
       </th>
-      <th>Thao tác</th>
+      <th *ngIf="canEditOrDelete()">Thao tác</th>
     </tr>
   </thead>
   <tbody>
@@ -26,9 +26,12 @@
       <td>{{ rank.name }}</td>
       <td>{{ rank.pointRangeStart }}</td>
       <td>{{ rank.pointRangeEnd }}</td>
-      <td class="flex">
-        <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2" (click)="openEditFormRank(rank)">Sửa</a>
+      <td *ngIf="canEditOrDelete()" >
+        <div class="flex">
+          <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2" (click)="openEditFormRank(rank)">Sửa</a>
         <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded" (click)="showConfirmDelete(rank)" >Xóa</a>
+        </div>
+
       </td>
     </tr>
   </tbody>

@@ -13,6 +13,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CriteriaOfEvaluateComponent } from '../criteria-of-evaluate/criteria-of-evaluate.component';
 import { EvaluateFormEditComponent } from './evaluate-form-edit/evaluate-form-edit.component';
 import { userInfo } from 'os';
+import { Router } from '@angular/router';
+import { AuthService } from '../../Services/auth.service';
 
 interface Evaluate {
   id: string;
@@ -36,7 +38,7 @@ interface User {
   mail: string;
   gender: string;
   teachGroupId: string;
-  point: number;
+  points: number;
   avatar: string;
 }
 interface Rank {
@@ -60,7 +62,12 @@ interface ColumnItem {
 
 })
 export class DetailUserComponent implements OnInit {
-  constructor(private route: ActivatedRoute,private service: LinkedService, private modal: NzModalService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private service: LinkedService,
+    private modal: NzModalService,
+    private router: Router,
+    private authService: AuthService) { }
   loading = true;
   listOfEvaluate: Evaluate[] = [];
   listOfDisplayData: Evaluate[] = [];
@@ -78,11 +85,16 @@ export class DetailUserComponent implements OnInit {
     mail: '',
     gender: '',
     teachGroupId: '',
-    point: 0,
+    points: 0,
     avatar: ''
   };
+  userPosition: string | null = null;
+  canEditOrDelete(): boolean {
+    return this.userPosition === 'Admin';
+  }
   ngOnInit(): void {
     const userId = this.route.snapshot.paramMap.get('id');
+    this.userPosition = this.authService.getUserPosition();
     if (userId) {
       this.getUserById(userId);
     } else {
@@ -210,7 +222,9 @@ export class DetailUserComponent implements OnInit {
     });
     modalRef.componentInstance!.userId = this.UserInfo.id;
 
-  modalRef.componentInstance?.formSubmit.subscribe(() => {
+    modalRef.componentInstance?.formSubmitAdd.subscribe((valuateId: string) => {
+    this.router.navigate([`/nguoi-dung/danh-gia/${valuateId}`]);
+
     this.reloadListEvaluate();
     modalRef.close();
   });
@@ -249,6 +263,23 @@ export class DetailUserComponent implements OnInit {
     this.reloadListEvaluate();
     modalRef.close();
   });
+  }
+  FormSend(data: Evaluate) {
+    const val = {
+      UserId: this.UserInfo.id,
+      RequetedPermissionId: data.id,
+      TimeStamp: Date.now,
+      Status: 'Đang gửi'
+    };
+      console.log('Form data being sent:', val); // Kiểm tra dữ liệu được gửi đi
+this.service.addPermissionRequests(val).subscribe(res => {
+        if (res) {
+          alert(res.message);
+        }
+      }, error => {
+        console.error('Error:', error); // In ra thông tin lỗi chi tiết
+        alert('Đã xảy ra lỗi: ' + error.message);
+      });
   }
 
   showConfirmDelete(data: Evaluate): void {

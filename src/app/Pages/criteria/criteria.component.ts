@@ -9,6 +9,7 @@ import { RankComponent } from "../rank/rank.component";
 import { CriteriaFormAddComponent } from './criteria-form-add/criteria-form-add.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { CriteriaFormEditComponent } from './criteria-form-edit/criteria-form-edit.component';
+import { AuthService } from '../../Services/auth.service';
 
 interface Criteria {
   id: string;
@@ -49,7 +50,7 @@ export class CriteriaComponent implements OnInit {
   pageSize = 5;
   Criteria: any;
   listOfCriteriaGroup: CriteriaGroup[] = [];
-
+  userPosition: string | null = null;
 
   getCriteriaGroupNameById(criteriaGroupId: string): string {
   if (!criteriaGroupId) return 'Unknown Group'; // Xử lý giá trị không hợp lệ
@@ -95,7 +96,13 @@ export class CriteriaComponent implements OnInit {
       filterFn: null
     }
     ];
-  constructor(private service: LinkedService, private modal: NzModalService) { }
+  constructor(private service: LinkedService,
+    private modal: NzModalService,
+    private authService: AuthService) { }
+
+  canEditOrDelete(): boolean {
+    return this.userPosition === 'Admin';
+  }
 
   reloadListCriteria() {
     this.loading = true;
@@ -205,6 +212,8 @@ export class CriteriaComponent implements OnInit {
   ngOnInit(): void {
     this.reloadListCriteria();
     this.reloadListCriteriaGroup();
+    this.userPosition = this.authService.getUserPosition();
+
   }
 
 }

@@ -6,6 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { LinkedService } from '../../linked.service';
 import { RankFormAddComponent } from './rank-form-add/rank-form-add.component';
 import { RankFormEditComponent } from './rank-form-edit/rank-form-edit.component';
+import { AuthService } from '../../Services/auth.service';
 
 interface Rank {
   id: string;
@@ -38,8 +39,14 @@ export class RankComponent implements OnInit {
   pageIndex = 1;
   pageSize = 5;
   Rank: any;
-  constructor(private service: LinkedService, private modal: NzModalService) { }
-
+  constructor(private service: LinkedService,
+    private modal: NzModalService,
+    private authService: AuthService
+  ) { }
+    userPosition: string | null = null;
+  canEditOrDelete(): boolean {
+    return this.userPosition === 'Admin';
+  }
   listOfRankColumns: ColumnItem[] = [
   {
     name: 'Tên',
@@ -156,5 +163,6 @@ export class RankComponent implements OnInit {
   }
   ngOnInit(): void {
     this.reloadListRank();
+    this.userPosition = this.authService.getUserPosition();
   }
 }

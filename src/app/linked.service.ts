@@ -199,10 +199,43 @@ export class LinkedService {
   updateEvaluate(data: any): Observable<ApiResponse<any>> {
     return this.http.put<ApiResponse<any>>(`${this.APIUrl}/Evaluate`, data);
   }
+
+  updateEvaluateStt(id: string, stt: number): Observable<any> {
+  const body = { stt: stt }; // body chứa thông tin cần update
+  return this.http.put<ApiResponse<any>>(`${this.APIUrl}/Evaluate/PutEvaluateStt/${id}`, body).pipe(
+    catchError(error => {
+      console.error('Error updating evaluate status:', error);
+      return of(null);
+    })
+  );
+}
+
+
   deleteEvaluate(id: any): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/Evaluate/${id}`);
   }
   deleteCriteriOfAEvaluate(id: any): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/CriteriaOfAEvaluation/${id}`);
   }
+
+  // Các phương thức liên quan đến permission requests
+  takeListRequests(): Observable<any[]> {
+    return this.http.get<ApiResponse<any[]>>(`${this.APIUrl}/PermissionRequests`).pipe(
+      map(response => response.data || []),
+      catchError(error => {
+        console.error('Error fetching log list:', error);
+        return of([]);
+      })
+    );
+  }
+
+  addPermissionRequests(data: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.APIUrl}/PermissionRequests`, data);
+  }
+
+  deletePermissionRequests(id: any): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/PermissionRequests/${id}`);
+  }
+
+
 }

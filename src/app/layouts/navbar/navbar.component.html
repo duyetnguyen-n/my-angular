@@ -9,9 +9,19 @@
   </form>
   <input type="checkbox" id="switch-mode" hidden>
   <label for="switch-mode" class="switch-mode"></label>
-  <a href="#" class="notification">
+  <a class="notification" (click)="toggleDropdown()">
     <i class='bx bxs-bell'></i>
     <span class="num">8</span>
+
+    <div *ngIf="isDropdownVisible" class="dropdown">
+      <ul>
+        <li class="flex items-center" *ngFor="let request of requestedPermissions">
+          <p>{{ getEvaluateById(request.requetedPermissionId) }} của {{ getUserById(request.userId) }} đang {{request.status}}</p>
+          <a class="flex items-center h-fit but-add hover:bg-sky-200 text-white rounded">Xem</a>
+          <a class="flex items-center h-fit but-add hover:bg-sky-200 text-white text-md rounded">Xóa</a>
+        </li>
+      </ul>
+    </div>
   </a>
   <a href="#" class="profile">
     <img src="img/people.png">

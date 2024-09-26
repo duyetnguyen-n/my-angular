@@ -10,7 +10,7 @@
   <div class="box-top-right mx-2 max-h-80 overflow-auto">
     <div class="flex place-content-between">
       <h2 class="text-xl">Danh sách tiêu chí:</h2>
-      <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+      <a *ngIf="canEditOrDelete()" class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
       nz-button nzType="primary"
       (click)="openAddFormCriteria()">Thêm</a>
     </div>
@@ -27,7 +27,7 @@
           <th *ngFor="let column of listOfCriteriaColumns" [(nzSortOrder)]="column.sortOrder" [nzSortFn]="column.sortFn">
             {{ column.name }}
           </th>
-          <th>
+          <th *ngIf="canEditOrDelete()">
             Thao tác
           </th>
         </tr>
@@ -40,7 +40,7 @@
           <td>{{ criteria.personCheck }}</td>
           <td *ngIf="listOfCriteriaGroup.length > 0">{{ getCriteriaGroupNameById(criteria.criteriaGroupId) }}</td>
           <td *ngIf="listOfCriteriaGroup.length === 0">Loading...</td>
-          <td>
+          <td *ngIf="canEditOrDelete()">
             <div class="flex">
               <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
                 (click)="openEditFormCriteria(criteria)">Sửa</a>

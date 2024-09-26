@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FullscreenFormComponent } from '../../../Shared/fullscreenform/fullscreenform.component';
 import { LinkedService } from '../../../linked.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 interface Rank {
   id: string;
@@ -19,7 +20,10 @@ interface Rank {
 export class EvaluateFormAddComponent {
   listOfRanks: Rank[] = [];
   @Output() formSubmit = new EventEmitter<void>();
+  @Output() formSubmitAdd = new EventEmitter<string>(); // Truyền evaluateId
+
   @Input() userId: string = '';
+  evaluate_id: string = '';
 
   evaluate_name: string = '';
   evaluate_userId: string = '';
@@ -32,7 +36,7 @@ export class EvaluateFormAddComponent {
 evaluate_to: string = '';
 
 
-  constructor(private service: LinkedService) { }
+  constructor(private service: LinkedService,private router: Router) { }
 
   onEvaluateChange() {
   const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
@@ -44,7 +48,6 @@ evaluate_to: string = '';
     this.evaluate_to = new Date(currentYear + 1, 4, 19).toISOString().split('T')[0]; // 19/5
   }
 }
-
 
   addevaluate() {
     if (this.evaluate_name && this.evaluate_from && this.evaluate_to) {
@@ -65,8 +68,10 @@ evaluate_to: string = '';
         if (res) {
           alert(res.message);
         }
-        this.formSubmit.emit();
+        const evaluateId = res.data.id;
+        this.formSubmitAdd.emit(evaluateId);
       }, error => {
+
         console.error('Error:', error); // In ra thông tin lỗi chi tiết
         alert('Đã xảy ra lỗi: ' + error.message);
       });
@@ -82,6 +87,7 @@ evaluate_to: string = '';
       this.listOfRanks = data;
     });
   }
+
   ngOnInit(): void {
     this.reloadListRank();
   }

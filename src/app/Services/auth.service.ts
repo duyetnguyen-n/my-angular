@@ -52,6 +52,24 @@ export class AuthService {
     return false;
 
   }
+  getUserPosition(): string | null {
+  const token = this.getToken();
+  if (token) {
+    const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+    return tokenPayload.role || null;
+  }
+  return null;
+  }
+
+  getCurrentUserId(): string | null {
+    const token = this.getToken();
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub || null;
+    }
+    return null;
+  }
+
 
   hasToken(): boolean {
     if (this.isBrowser()) {
