@@ -12,7 +12,7 @@ import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { CriteriaOfEvaluateComponent } from '../criteria-of-evaluate/criteria-of-evaluate.component';
 import { EvaluateFormEditComponent } from './evaluate-form-edit/evaluate-form-edit.component';
-
+import { userInfo } from 'os';
 
 interface Evaluate {
   id: string;
@@ -83,20 +83,20 @@ export class DetailUserComponent implements OnInit {
   };
   ngOnInit(): void {
     const userId = this.route.snapshot.paramMap.get('id');
-    if (userId) { // Kiểm tra nếu userId không phải là null
-      this.getUserNameById(userId);
+    if (userId) {
+      this.getUserById(userId);
     } else {
-      console.error('User ID is null'); // Thông báo lỗi nếu userId là null
+      console.error('User ID is null');
     }
-    this.reloadListEvaluate();
+    this.reloadListRank();
   }
-  getUserNameById(userId: string) {
+  getUserById(userId: string) {
   this.service.takeUser(userId).subscribe((response: any) => {
     this.UserInfo = response.data;
-    console.log('UserInfo:', this.UserInfo);  // Kiểm tra giá trị sau khi gán
-
+    console.log('UserInfoaa:', this.UserInfo);
+    this.reloadListEvaluate();
   }, error => {
-      console.error('Error fetching user:', error);  // Kiểm tra lỗi
+      console.error('Error fetching user:', error);
   });
 }
   getRankNameById(rankId: string): string {
@@ -164,16 +164,26 @@ export class DetailUserComponent implements OnInit {
   ];
   reloadListEvaluate() {
     this.loading = true;
-    this.service.takeListEvaluate().subscribe(data => {
-        console.log(data);  // Kiểm tra phản hồi từ API
+     console.log('UserInfoID:', this.UserInfo.id);
+
+    this.service.takeListEvaluateByUserId(this.UserInfo.id).subscribe(data => {
+        console.log(data);
         this.listOfEvaluate = data;
         this.updateDisplayData();
         this.loading = false;
     }, error => {
-        console.error('Error fetching evaluates:', error);  // Kiểm tra lỗi
+        console.error('Error fetching evaluates:', error);
         this.loading = false;
     });
-}
+  }
+  reloadListRank() {
+    this.service.takeListRank().subscribe(data => {
+      this.listOfRanks = data;
+    },error => {
+        console.error('Error fetching evaluates:', error);
+        this.loading = false;
+    });
+  }
 
     updateDisplayData(): void {
       const startIndex = (this.pageIndex - 1) * this.pageSize;
@@ -197,16 +207,18 @@ export class DetailUserComponent implements OnInit {
     nzBodyStyle: {
       borderRadius: '20px',
     }
-  });
+    });
+    modalRef.componentInstance!.userId = this.UserInfo.id;
 
   modalRef.componentInstance?.formSubmit.subscribe(() => {
     this.reloadListEvaluate();
     modalRef.close();
   });
   }
+
   openEditFormEvaluate(data: Evaluate): void {
     const modalRef = this.modal.create({
-    nzTitle: 'Thêm Tiêu Chí',
+    nzTitle: 'Sửa Đánh Giá',
     nzContent: EvaluateFormEditComponent,
       nzFooter: null,
     nzWidth: 800 ,
@@ -217,6 +229,8 @@ export class DetailUserComponent implements OnInit {
     },
     nzBodyStyle: {
       borderRadius: '20px',
+      height: 'calc(100% - 55px)',  // Adjust height inside modal body
+      overflowY: 'auto',  // Để cho nội dung có thể cuộn nếu quá dài
     }
     });
     modalRef.componentInstance!.evaluate_id = data.id;
@@ -225,8 +239,11 @@ export class DetailUserComponent implements OnInit {
     modalRef.componentInstance!.evaluate_rankId = data.rankId;
     modalRef.componentInstance!.evaluate_totalPointSubstraction = data.totalPointSubstraction;
     modalRef.componentInstance!.evaluate_totalPointAddition = data.totalPointAddition;
-    modalRef.componentInstance!.evaluate_from = data.from;
-    modalRef.componentInstance!.evaluate_to = data.to;
+    const fromDate = new Date(data.from);
+    const toDate = new Date(data.to);
+    modalRef.componentInstance!.evaluate_from = fromDate.toISOString().split('T')[0];
+    modalRef.componentInstance!.evaluate_to = toDate.toISOString().split('T')[0];
+
 
   modalRef.componentInstance?.formSubmit.subscribe(() => {
     this.reloadListEvaluate();
@@ -234,6 +251,35 @@ export class DetailUserComponent implements OnInit {
   });
   }
 
-
+  showConfirmDelete(data: Evaluate): void {
+    this.modal.confirm({
+      nzTitle: 'Bạn có chắc chắn muốn xóa đánh giá này?',
+      nzContent: `<b>${data.name}</b> sẽ bị xóa vĩnh viễn.`,
+      nzFooter: null,
+      nzMaskClosable: true, // Đóng khi click ra ngoài
+      nzMask: true, // Hiển thị lớp phủ mờ
+      nzStyle: {
+        borderRadius: '20px',
+      },
+      nzBodyStyle: {
+        borderRadius: '20px',
+      },
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          this.service.deleteEvaluate(data.id).subscribe(
+            res => {
+              this.reloadListEvaluate(); // Tải lại danh sách sau khi xóa thành công
+              resolve();
+            },
+            error => {
+              const errorMessage = error.error?.message || 'Đã xảy ra lỗi không xác định';
+              alert(errorMessage); // Hiển thị thông báo lỗi
+              console.error('Error:', error);
+              reject(); // Nếu có lỗi xảy ra
+            }
+          );
+        })
+    });
+  }
 
 }

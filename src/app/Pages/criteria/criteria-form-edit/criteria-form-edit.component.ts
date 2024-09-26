@@ -36,7 +36,7 @@ export class CriteriaFormEditComponent implements OnInit {
       const val = {
         Id: this.criteria_id,
         Name: this.criteria_name,
-        Point: this.criteria_points,
+        Points: this.criteria_points,
         Notes: this.criteria_notes,
         PersonCheck: this.criteria_PersonCheck,
         CriteriaGroupId: this.criteria_group,

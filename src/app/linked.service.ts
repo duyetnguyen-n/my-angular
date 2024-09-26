@@ -170,7 +170,16 @@ export class LinkedService {
       })
     );
   }
-  takeListCriteriaOfEvaluate(id: string): Observable<any[]> {
+  takeListEvaluateByUserId(id: any): Observable<any[]> {
+    return this.http.get<ApiResponse<any[]>>(`${this.APIUrl}/Evaluate/User/${id}`).pipe(
+      map(response => response.data || []),
+      catchError(error => {
+        console.error('Error fetching log list:', error);
+        return of([]);
+      })
+    );
+  }
+  takeListCriteriaOfEvaluate(id: any): Observable<any[]> {
     return this.http.get<ApiResponse<any[]>>(`${this.APIUrl}/CriteriaOfAEvaluation/${id}`).pipe(
       map(response => response.data || []),
       catchError(error => {
@@ -178,6 +187,10 @@ export class LinkedService {
         return of([]);
       })
     );
+  }
+
+  addCriteriaOfEvaluate(data: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.APIUrl}/CriteriaOfAEvaluation`, data);
   }
 
   addEvaluate(data: any): Observable<ApiResponse<any>> {
@@ -188,5 +201,8 @@ export class LinkedService {
   }
   deleteEvaluate(id: any): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/Evaluate/${id}`);
+  }
+  deleteCriteriOfAEvaluate(id: any): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/CriteriaOfAEvaluation/${id}`);
   }
 }

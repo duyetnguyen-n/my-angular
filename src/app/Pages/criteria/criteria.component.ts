@@ -165,7 +165,7 @@ export class CriteriaComponent implements OnInit {
   modalRef.componentInstance!.criteria_group = data.criteriaGroupId;
 
   modalRef.componentInstance?.formSubmit.subscribe(() => {
-    this.reloadListCriteriaGroup();
+    this.reloadListCriteria();
     modalRef.close();
   });
   }

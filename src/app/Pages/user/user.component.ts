@@ -55,7 +55,6 @@ export class UserComponent implements OnInit {
   listOfTeachGroups: TeachGroup[] = [];
   selectedTeachGroupId: string | null = null; // Thêm thuộc tính này để lưu ID của nhóm được chọn
 
-
   getTeachGroupNameById(teachGroupId: string): string {
     const teachGroup = this.listOfTeachGroups.find(tg => tg.id === teachGroupId);
     return teachGroup ? teachGroup.name : 'Unknown TeachGroup';
@@ -173,7 +172,7 @@ listOfUserColumns: ColumnItem[] = [
       nzBodyStyle: { borderRadius: '20px' }
     });
 
-    modalRef.componentInstance!.user = {
+    modalRef.componentInstance!.userForm = {
       id: data.id,
       name: data.name,
       numberPhone: data.numberPhone,

@@ -1,32 +1,83 @@
+
 <div class="m-5 container pr-8">
-  <div class="box-top-right mx-2 max-h-80 overflow-auto">
-    <div class="flex place-content-between">
-      <h2 class="text-xl">Danh sách tiêu chí:</h2>
+  <div class="box-top-right m-2 max-h-80 overflow-auto">
+    <a (click)="onBack()" class="flex mb-3">
+      <i class='flex items-center mr-2 bx bx-arrow-back'></i> Quay lại
+    </a>
+    <div class="flex items-center">
+      <h2 class="text-xl blue flex items-center">Danh Sách Tiêu Chí:</h2>
+      <select [(ngModel)]="selectedCriteriaGroup" (change)="applyFilter()" class="bg-gray-50 mx-2 border h-fit py-2 px-4 leading-tight border-gray-300 text-gray-900 text-sm rounded-lg">
+        <option value="">Tất cả nhóm</option>
+        <option *ngFor="let group of listOfCriteriaGroup" [value]="group.id">{{ group.name }}</option>
+      </select>
+      <select [(ngModel)]="pointFilter" (change)="applyFilter()" class="bg-gray-50 mr-2 border h-fit py-2 px-4 leading-tight border-gray-300 text-gray-900 text-sm rounded-lg">
+        <option value="">Tất cả</option>
+        <option value="positive">Cộng điểm</option>
+        <option value="negative">Trừ điểm</option>
+      </select>
+      <input type="text" class="bg-gray-50 mr-2 border h-fit py-2 px-4 leading-tight border-gray-300 text-gray-900 text-sm rounded-lg" placeholder="Tìm kiếm theo tên..." [(ngModel)]="searchText" (input)="applyFilter()" />
+
     </div>
     <nz-table #rowSelectionTable nzShowSizeChanger [nzData]="listOfCriteria"
-      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+      (nzCurrentPageDataChange)="onCurrentPageCriteriaChange($event)">
       <thead>
         <tr>
-          <th [nzSelections]="listOfSelection" [(nzChecked)]="checked" [nzIndeterminate]="indeterminate"
-            (nzCheckedChange)="onAllChecked($event)"></th>
           <th>Tên</th>
           <th>Điểm</th>
           <th>Ghi Chú</th>
           <th>Người Kiểm Tra</th>
           <th>Nhóm Tiêu Chí</th>
+          <th>Thao Tác</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of rowSelectionTable.data; trackBy: trackById">
-          <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+        <tr *ngFor="let data of listOfCurrentPageData; trackBy: trackByCriteriaId">
           <td>{{ data.name | slice: 0:40 }}{{ data.name.length > 50 ? '...' : '' }}</td>
           <td>{{ data.points }}</td>
           <td>{{ data.notes }}</td>
           <td>{{ data.personCheck }}</td>
           <td>{{ getCriteriaGroupNameById(data.criteriaGroupId) }}</td>
-
+          <td>
+            <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+              (click)="openCriteriaOfEvaluate(data.id)">Thêm</a>
+          </td>
         </tr>
       </tbody>
     </nz-table>
   </div>
+
+  <!-- Danh sách tiêu chí đã chọn -->
+  <div class="box-top-right m-2 max-h-80 overflow-auto">
+    <div class="flex place-content-between">
+      <h2 class="text-xl blue">Danh Sách Tiêu Chí Đã Chọn:</h2>
+    </div>
+    <nz-table #rowSelectionTable nzShowSizeChanger [nzData]="listOfCriteriaOfAEvaluate"
+      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+      <thead>
+        <tr>
+          <th>Tên</th>
+          <th>Số Lượng</th>
+          <th>Tổng Điểm</th>
+          <th>Thao Tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listOfCurrentPageCriteriaOfAEvaluate; trackBy: trackByCriteriaOfAEvaluationId">
+          <td>{{ getCriteriaNameById(data.criteriaId) }}</td>
+          <td>{{ data.quantity }}</td>
+          <td>{{ data.total }}</td>
+          <td>
+            <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+              (click)="showConfirmDelete(data)">Xóa</a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <div class="flex justify-end mt-4">
+      <button (click)="onBack()"
+        class="flex items-center but-add hover:bg-sky-200 text-white px-6 py-3 rounded">Xong</button>
+    </div>
+  </div>
 </div>
+
+

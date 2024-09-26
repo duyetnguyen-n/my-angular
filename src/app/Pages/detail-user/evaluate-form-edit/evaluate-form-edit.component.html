@@ -29,7 +29,7 @@
     <div class="flex place-content-between mb-2">
       <h2 class="text-xl">Danh sách tiêu chí:</h2>
       <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded" nz-button nzType="primary"
-        >Sửa</a>
+        [routerLink]="['/nguoi-dung/danh-gia', evaluate_id]">Sửa</a>
     </div>
 
     <nz-table class="border-collapse rounded-md border-blue-400" #rowSelectionTable nzShowSizeChanger [nzData]="listOfCriteriaOfAevaluate"
@@ -55,6 +55,8 @@
       </tbody>
     </nz-table>
   </div>
-  <button class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded">oke</button>
-
+<div class="flex justify-end mt-4">
+  <button (click)="editEvaluate()"
+    class="flex items-center but-add hover:bg-sky-200 text-white px-6 py-3 rounded">Xong</button>
+</div>
 </div>

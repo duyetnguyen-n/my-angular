@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit,Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FullscreenFormComponent } from '../../../Shared/fullscreenform/fullscreenform.component';
 import { LinkedService } from '../../../linked.service';
@@ -19,6 +19,8 @@ interface Rank {
 export class EvaluateFormAddComponent {
   listOfRanks: Rank[] = [];
   @Output() formSubmit = new EventEmitter<void>();
+  @Input() userId: string = '';
+
   evaluate_name: string = '';
   evaluate_userId: string = '';
   evaluate_rankId: string = '';
@@ -48,7 +50,7 @@ evaluate_to: string = '';
     if (this.evaluate_name && this.evaluate_from && this.evaluate_to) {
       const val = {
         Name: this.evaluate_name,
-        UserId: this.evaluate_userId,
+        UserId: this.userId,
         RankId: this.evaluate_rankId,
         Stt: this.evaluate_stt,
         TotalPointAddition: this.evaluate_totalPointAddition,

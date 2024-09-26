@@ -27,6 +27,7 @@ export class CriteriaGroupFormAddComponent {
       };
       this.service.addCriteriaGroup(val).subscribe(res => {
         if (res) {
+          
           alert(res.message);
         }
         this.formSubmit.emit();

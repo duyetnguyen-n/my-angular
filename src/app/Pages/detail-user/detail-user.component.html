@@ -81,15 +81,15 @@
         <td>{{ eva.totalPointAddition }}</td>
         <td>{{ eva.totalPoint }}</td>
         <td>{{ eva.stt }}</td>
-        <td>{{ eva.from }}</td>
-        <td>{{ eva.to }}</td>
+        <td>{{ eva.from | date: 'short' }}</td>
+        <td>{{ eva.to | date: 'short'}}</td>
 
         <td>
           <div class="flex">
             <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
              (click)="openEditFormEvaluate(eva)" >Sửa</a>
             <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded"
-              >Xóa</a>
+              (click)="showConfirmDelete(eva)">Xóa</a>
           </div>
         </td>
       </tr>

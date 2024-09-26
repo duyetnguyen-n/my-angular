@@ -33,8 +33,13 @@ export const ROUTES: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'nguoi-dung/detail-user/:id',
+        path: 'nguoi-dung/chi-tiet-nguoi-dung/:id',
         loadChildren: () => import('../detail-user/detail-user.routes').then(m => m.ROUTES),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'nguoi-dung/danh-gia/:id',
+        loadChildren: () => import('../criteria-of-evaluate/criteria-of-evaluate.routes').then(m => m.ROUTES),
         canActivate: [AuthGuard]
       }
     ]

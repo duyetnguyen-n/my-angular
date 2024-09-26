@@ -5,6 +5,8 @@ import { LinkedService } from '../../../linked.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import {ActivatedRoute, RouterModule} from '@angular/router';
+
 
 interface Rank {
   id: string;
@@ -31,7 +33,7 @@ interface User {
 @Component({
   selector: 'app-evaluate-form-edit',
   standalone: true,
-  imports: [CommonModule,NzTableModule, FullscreenFormComponent, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule,NzTableModule,RouterModule, FullscreenFormComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './evaluate-form-edit.component.html',
   styleUrl: './evaluate-form-edit.component.css',
   providers: [NzModalService]
@@ -83,7 +85,9 @@ export class EvaluateFormEditComponent implements OnInit {
   @Input() evaluate_totalPointSubstraction: number | null = null;
   @Input() evaluate_totalPointAddition: number | null = null;
   @Input() evaluate_from: string ='';
-  @Input() evaluate_to: string ='' ;
+  @Input() evaluate_to: string = '';
+
+
 
   constructor(private service: LinkedService, private modal: NzModalService) { }
   onEvaluateChange() {
@@ -101,10 +105,6 @@ export class EvaluateFormEditComponent implements OnInit {
     if (this.evaluate_name && this.evaluate_userId && this.evaluate_rankId && this.evaluate_from && this.evaluate_to) {
       const val = {
         Id: this.evaluate_id,
-        UserId: this.evaluate_userId,
-        RankId: this.evaluate_rankId,
-        TotalPointSubstraction: this.evaluate_totalPointSubstraction,
-        TotalPointAddition: this.evaluate_totalPointAddition,
         From: this.evaluate_from,
         To: this.evaluate_to
       };

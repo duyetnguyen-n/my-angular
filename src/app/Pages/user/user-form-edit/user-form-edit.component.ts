@@ -20,53 +20,62 @@ interface TeachGroup {
 export class UserFormEditComponent implements OnInit {
   listOfTeachGroup: TeachGroup[] = [];
   @Output() formSubmit = new EventEmitter<void>();
-  @Input() user: any = ''; // Nhận dữ liệu user
+  @Input() userForm: any = '';
+  selectedFile: File | null = null;
 
   constructor(private service: LinkedService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.reloadListTeachGroup(); // Tải danh sách nhóm giảng dạy
   }
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.user.avatar = file;
-      this.user.avatarURL = URL.createObjectURL(file);
-    }
+onFileSelected(event: any): void {
+  const file = event.target.files[0];
+  if (file) {
+    this.selectedFile = file;
+    this.userForm.avatarURL = URL.createObjectURL(file); // Nếu bạn muốn hiển thị ảnh
   }
+}
+
 
   editUser() {
-    // Kiểm tra thông tin người dùng
+  const formData = new FormData();
+  formData.append('id', this.userForm.id);
+  formData.append('name', this.userForm.name);
+  formData.append('point', this.userForm.point.toString());
+  formData.append('numberPhone', this.userForm.numberPhone);
+  formData.append('password', this.userForm.password);
+  formData.append('age', this.userForm.age.toString());
+  formData.append('gender', this.userForm.gender);
+  formData.append('mail', this.userForm.mail);
+  formData.append('position', this.userForm.position);
+  formData.append('teachGroupId', this.userForm.teachGroupId);
 
-      const val = {
-        id: this.user.id,
-        name: this.user.name,
-        point: this.user.point,
-        numberPhone: this.user.numberPhone,
-        password: this.user.password, // nếu bạn muốn sửa đổi password
-        position: this.user.position,
-        age: this.user.age,
-        mail: this.user.mail,
-        gender: this.user.gender,
-        teachGroupId: this.user.teachGroupId,
-        avatar: this.user.avatar
-      };
-      this.service.updateUser(val).subscribe(res => {
-        if (res) {
-          alert(res.message);
-        }
-        this.formSubmit.emit(); // Gửi tín hiệu về formSubmit
-      }, error => {
-        console.error('Error:', error);
-        alert('Đã xảy ra lỗi: ' + error.message);
-      });
-    
+  if (this.selectedFile) {
+    formData.append('avatar', this.selectedFile);
+  } else {
+    formData.append('avatar', this.userForm.avatar); 
   }
+
+  this.service.updateUser(formData).subscribe(res => {
+    if (res) {
+      alert(res.message);
+    }
+    console.log("a:" + formData);
+    this.formSubmit.emit();
+  }, error => {
+    console.error('Error:', error);
+    if (error.status === 400) {
+      console.error('Validation errors:', error.error.errors);
+    }
+    alert('Đã xảy ra lỗi: ' + error.message);
+
+  });
+}
 
   reloadListTeachGroup() {
     this.service.takeListTeachGroups().subscribe(data => {
       console.log('Teach Group Data:', data);
-      this.listOfTeachGroup = Array.isArray(data) ? data : []; // Đảm bảo là mảng
+      this.listOfTeachGroup = Array.isArray(data) ? data : [];
     });
   }
 }
