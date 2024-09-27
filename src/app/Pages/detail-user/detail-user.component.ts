@@ -38,12 +38,18 @@ interface User {
   mail: string;
   gender: string;
   teachGroupId: string;
-  points: number;
+  point: number;
   avatar: string;
 }
 interface Rank {
   id: string;
   name: string;
+}
+interface PermissionRequests {
+  id: string;
+  userId: string;
+  requetedPermissionId: string;
+  status: string;
 }
 interface ColumnItem {
   name: string;
@@ -68,6 +74,7 @@ export class DetailUserComponent implements OnInit {
     private modal: NzModalService,
     private router: Router,
     private authService: AuthService) { }
+    isRequestSent: { [key: string]: boolean } = {};
   loading = true;
   listOfEvaluate: Evaluate[] = [];
   listOfDisplayData: Evaluate[] = [];
@@ -75,6 +82,7 @@ export class DetailUserComponent implements OnInit {
   pageSize = 5;
   Evaluate: any;
   listOfRanks: Rank[] = [];
+  listPermissionRepuests: PermissionRequests[] = [];
   UserInfo: User = {
     id: '',
     numberPhone: '',
@@ -85,7 +93,7 @@ export class DetailUserComponent implements OnInit {
     mail: '',
     gender: '',
     teachGroupId: '',
-    points: 0,
+    point: 0,
     avatar: ''
   };
   userPosition: string | null = null;
@@ -94,6 +102,7 @@ export class DetailUserComponent implements OnInit {
   }
   ngOnInit(): void {
     const userId = this.route.snapshot.paramMap.get('id');
+    this.reloadListPermissionRequests();
     this.userPosition = this.authService.getUserPosition();
     if (userId) {
       this.getUserById(userId);
@@ -115,6 +124,7 @@ export class DetailUserComponent implements OnInit {
     const rank = this.listOfRanks.find(r => r.id === rankId);
     return rank ? rank.name : 'Unknown Rank';
   }
+
   listOfEvaluateColumns: ColumnItem[] = [
     {
       name: 'Tên',
@@ -174,6 +184,16 @@ export class DetailUserComponent implements OnInit {
 }
 
   ];
+
+  getRequestsFromEvaluateId(evaluateId: string): PermissionRequests {
+  const requests = this.listPermissionRepuests.find(p => p.requetedPermissionId === evaluateId);
+  return requests ?? { id: '', userId: '', requetedPermissionId: '', status: '' };
+  }
+  reloadListPermissionRequests() {
+    this.service.takeListRequests().subscribe((data) => {
+      this.listPermissionRepuests = Array.isArray(data) ? data : [];
+    });
+  }
   reloadListEvaluate() {
     this.loading = true;
      console.log('UserInfoID:', this.UserInfo.id);
@@ -269,10 +289,11 @@ export class DetailUserComponent implements OnInit {
       UserId: this.UserInfo.id,
       RequetedPermissionId: data.id,
       TimeStamp: Date.now,
-      Status: 'Đang gửi'
+      Status: 'Chờ duyệt'
     };
       console.log('Form data being sent:', val); // Kiểm tra dữ liệu được gửi đi
-this.service.addPermissionRequests(val).subscribe(res => {
+    this.service.addPermissionRequests(val).subscribe(res => {
+          this.isRequestSent[val.RequetedPermissionId] = true;
         if (res) {
           alert(res.message);
         }
@@ -280,6 +301,17 @@ this.service.addPermissionRequests(val).subscribe(res => {
         console.error('Error:', error); // In ra thông tin lỗi chi tiết
         alert('Đã xảy ra lỗi: ' + error.message);
       });
+  }
+  cancelRequest(eva: Evaluate): void {
+    this.service.deletePermissionRequests(eva.id).subscribe(
+      (response: any) => {
+        this.isRequestSent[eva.id] = false;
+        console.log('Yêu cầu đã được hủy:', response);
+      },
+      (error: any) => {
+        console.error('Hủy yêu cầu thất bại:', error);
+      }
+    );
   }
 
   showConfirmDelete(data: Evaluate): void {

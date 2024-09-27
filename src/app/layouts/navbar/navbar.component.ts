@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LinkedService } from '../../linked.service';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 interface Evaluate {
   id: string;
@@ -31,7 +32,7 @@ interface User {
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule,CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })

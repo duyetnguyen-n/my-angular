@@ -46,6 +46,11 @@ export const ROUTES: Routes = [
         path: 'nguoi-dung/danh-gia/:id',
         loadChildren: () => import('../criteria-of-evaluate/criteria-of-evaluate.routes').then(m => m.ROUTES),
         canActivate: [AuthGuard]
+      },
+      {
+        path: 'cap-quyen/danh-gia/:id',
+        loadChildren: () => import('../requests-permission/requests-permission.routes').then(m => m.ROUTES),
+        canActivate: [AuthGuard]
       }
     ]
   }

@@ -1,5 +1,5 @@
 <div class="m-2 container pr-8">
-  <div class="box-top-left mx-2 max-h-60 overflow-auto">
+  <div class="box-top-left mx-2 mb-4 max-h-60 overflow-auto">
     <form (formSubmit)="editEvaluate()">
       <div class="grid grid-cols-12">
         <div class="col-span-12 p-2">
@@ -25,7 +25,8 @@
       </div>
     </form>
   </div>
-  <div class="box-top-right mx-4 max-h-80 overflow-auto">
+
+  <div class="box-top-right mx-2 max-h-80 overflow-auto">
     <div class="flex place-content-between mb-2">
       <h2 class="text-xl">Danh sách tiêu chí:</h2>
       <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded" nz-button nzType="primary"
@@ -55,8 +56,9 @@
       </tbody>
     </nz-table>
   </div>
+
   <div class="flex justify-end mt-4">
-    <button (click)="editEvaluate()"
-      class="flex items-center but-add hover:bg-sky-200 text-white px-6 py-3 rounded">Xong</button>
+    <button (click)="approvePermission()"
+      class="flex items-center but-add hover:bg-sky-200 text-white px-6 py-3 rounded">Cấp Quyền</button>
   </div>
 </div>

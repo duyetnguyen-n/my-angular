@@ -66,9 +66,31 @@ export class LogComponent implements OnInit {
     const user = this.listOfUsers.find(user => user.id === userId);
     return user ? user.name : 'Unknown User';
   }
+  getUserRole(): string {
+  const token = localStorage.getItem('token');
+  if (token) {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role;
+  }
+  return 'User';
+}
+
+getUserId(): string {
+  const token = localStorage.getItem('token');
+  if (token) {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.sub;
+  }
+  return '';
+}
+
 
   reloadListLog() {
-    this.loading = true;
+  this.loading = true;
+  const userRole = this.getUserRole();
+  const userId = this.getUserId();
+
+  if (userRole === 'Admin') {
     this.service.takeListLog().subscribe(
       data => {
         this.listOfLog = data;
@@ -80,7 +102,21 @@ export class LogComponent implements OnInit {
         this.loading = false;
       }
     );
+  } else {
+    this.service.takeListLogByUserId(userId).subscribe(
+      data => {
+        this.listOfLog = data;
+        this.updateDisplayData();
+        this.loading = false;
+      },
+      error => {
+        console.error('Error loading logs:', error);
+        this.loading = false;
+      }
+    );
   }
+}
+
 
   reloadListUsers() {
     this.service.takeListUser().subscribe(data => {

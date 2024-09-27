@@ -151,6 +151,16 @@ export class LinkedService {
     );
   }
 
+  takeListLogByUserId(id:any): Observable<any[]> {
+    return this.http.get<ApiResponse<any[]>>(`${this.APIUrl}/Log/user/${id}`).pipe(
+      map(response => response.data || []),
+      catchError(error => {
+        console.error('Error fetching log list:', error);
+        return of([]); // Trả về mảng rỗng nếu có lỗi
+      })
+    );
+  }
+
   deleteLog(id: any): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.APIUrl}/Log/${id}`);
   }
@@ -227,6 +237,10 @@ export class LinkedService {
         return of([]);
       })
     );
+  }
+
+  updatePermissionRequests(data: any): Observable<ApiResponse<any>> {
+    return this.http.put<ApiResponse<any>>(`${this.APIUrl}/PermissionRequests`, data);
   }
 
   addPermissionRequests(data: any): Observable<ApiResponse<any>> {

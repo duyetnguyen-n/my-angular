@@ -16,9 +16,9 @@
     <div *ngIf="isDropdownVisible" class="dropdown">
       <ul>
         <li class="flex items-center" *ngFor="let request of requestedPermissions">
-          <p>{{ getEvaluateById(request.requetedPermissionId) }} của {{ getUserById(request.userId) }} đang {{request.status}}</p>
-          <a class="flex items-center h-fit but-add hover:bg-sky-200 text-white rounded">Xem</a>
-          <a class="flex items-center h-fit but-add hover:bg-sky-200 text-white text-md rounded">Xóa</a>
+          <p class="text-sm">{{ getEvaluateById(request.requetedPermissionId) }} của {{ getUserById(request.userId) }} đang {{request.status}}</p>
+          <a class="flex text-sm items-center h-fit but-add hover:bg-sky-200 text-white rounded p-1 mr-1" [routerLink]="['/cap-quyen/danh-gia', request.requetedPermissionId]">Xem</a>
+          <a class="flex text-sm items-center h-fit but-add hover:bg-sky-200 text-white text-md rounded p-1">Xóa</a>
         </li>
       </ul>
     </div>

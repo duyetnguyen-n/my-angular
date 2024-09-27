@@ -5,7 +5,10 @@ import { LinkedService } from '../../linked.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import {ActivatedRoute, RouterModule} from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from '../../Services/auth.service';
+
 interface Rank {
   id: string;
   name: string;
@@ -13,6 +16,25 @@ interface Rank {
 interface Criteria {
   id: string;
   name: string;
+}
+interface Evaluate {
+  id: string;
+  name: string;
+  userId: string;
+  rankId: string;
+  stt: number;
+  totalPointSubstraction: number;
+  totalPointAddition: number;
+  from: string;
+  to: string;
+  totalPoint: number;
+}
+
+interface PermissionRequests {
+  id: string;
+  userId: string;
+  requetedPermissionId: string;
+  status: string;
 }
 interface CriteriaOfAEvaluate {
   id: string;
@@ -31,14 +53,13 @@ interface User {
 @Component({
   selector: 'app-requests-permission',
   standalone: true,
-  imports: [CommonModule,NzTableModule,RouterModule, FullscreenFormComponent, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, NzTableModule, RouterModule, FullscreenFormComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './requests-permission.component.html',
-  styleUrl: './requests-permission.component.css',
+  styleUrls: ['./requests-permission.component.css'],
   providers: [NzModalService]
-
 })
-export class RequestsPermissionComponent implements OnInit  {
-trackById(index: number, item: CriteriaOfAEvaluate): string {
+export class RequestsPermissionComponent implements OnInit {
+  trackById(index: number, item: CriteriaOfAEvaluate): string {
     return item.id;
   }
   listOfSelection = [
@@ -73,60 +94,93 @@ trackById(index: number, item: CriteriaOfAEvaluate): string {
   listOfRanks: Rank[] = [];
   listOfUsers: User[] = [];
   listOfCriterias: Criteria[] = [];
+  listPermissionRepuests: PermissionRequests[] = [];
+  userCurrentId: string | null = null;
+
 
   @Output() formSubmit = new EventEmitter<void>();
 
-  @Input() evaluate_id: string = '';
-  @Input() evaluate_name: string = '';
-  @Input() evaluate_userId: string = '';
-  @Input() evaluate_rankId: string = '';
-  @Input() evaluate_totalPointSubstraction: number | null = null;
-  @Input() evaluate_totalPointAddition: number | null = null;
-  @Input() evaluate_from: string ='';
-  @Input() evaluate_to: string = '';
+  evaluate_id: string = '';
+  evaluate_name: string = '';
+  evaluate_from: string = '';
+  evaluate_to: string = '';
 
+  constructor(private service: LinkedService,
+    private modal: NzModalService,
+    private router: Router,
+    private route: ActivatedRoute,
+  private authService: AuthService) { }
 
-
-  constructor(private service: LinkedService, private modal: NzModalService) { }
   onEvaluateChange() {
-  const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
-  if (this.evaluate_name === 'Đánh giá học kì 1') {
-    this.evaluate_from = new Date(currentYear, 4, 20).toISOString().split('T')[0]; // 20/5
-    this.evaluate_to = new Date(currentYear, 11, 15).toISOString().split('T')[0]; // 15/12
-  } else if (this.evaluate_name === 'Đánh giá học kì 2') {
-    this.evaluate_from = new Date(currentYear, 11, 16).toISOString().split('T')[0]; // 16/12
-    this.evaluate_to = new Date(currentYear + 1, 4, 19).toISOString().split('T')[0]; // 19/5
+    const currentYear = new Date().getFullYear();
+    if (this.evaluate_name === 'Đánh giá học kì 1') {
+      this.evaluate_from = new Date(currentYear, 4, 20).toISOString().split('T')[0];
+      this.evaluate_to = new Date(currentYear, 11, 15).toISOString().split('T')[0];
+    } else if (this.evaluate_name === 'Đánh giá học kì 2') {
+      this.evaluate_from = new Date(currentYear, 11, 16).toISOString().split('T')[0];
+      this.evaluate_to = new Date(currentYear + 1, 4, 19).toISOString().split('T')[0];
+    }
   }
-}
 
   editEvaluate() {
-    if (this.evaluate_name && this.evaluate_userId && this.evaluate_rankId && this.evaluate_from && this.evaluate_to) {
-      const val = {
-        Id: this.evaluate_id,
-        From: this.evaluate_from,
-        To: this.evaluate_to
-      };
+    const val = {
+      Id: this.evaluate_id,
+      Name: this.evaluate_name,
+      From: this.evaluate_from,
+      To: this.evaluate_to
+    };
 
-      this.service.updateEvaluate(val).subscribe(
-        (res) => {
-          if (res) {
-            alert(res.message);
-          }
-          this.formSubmit.emit();
-        },
-        (error) => {
-          console.error('Error:', error);
-          alert('Đã xảy ra lỗi: ' + error.message);
+
+    this.service.updateEvaluate(val).subscribe(
+      (res) => {
+        if (res) {
+          alert(res.message);
         }
-      );
-    } else {
-      alert('Vui lòng điền đầy đủ thông tin!');
-    }
+        this.formSubmit.emit();
+      },
+      (error) => {
+        console.log("abc: " + val.Id);
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi: ' + error.message );
+      }
+    );
+  }
+  getRequestsFromEvaluateId(evaluateId: string): PermissionRequests {
+  const requests = this.listPermissionRepuests.find(p => p.requetedPermissionId === evaluateId);
+  return requests ?? { id: '', userId: '', requetedPermissionId: '', status: '' };
+}
+
+
+  approvePermission() {
+    const userId = this.userCurrentId;
+    const val = {
+      Id: this.getRequestsFromEvaluateId(this.evaluate_id).id,
+      evaluateId: this.evaluate_id,
+      reviewerId: userId,
+      status: 'đã cấp phép'
+    };
+
+    this.service.updatePermissionRequests(val).subscribe(
+      (res) => {
+        if (res) {
+          alert('Cấp quyền thành công!');
+        }
+      },
+      (error) => {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi: ' + error.message );
+      }
+    );
   }
 
   reloadListRanks() {
     this.service.takeListRank().subscribe((data) => {
       this.listOfRanks = Array.isArray(data) ? data : [];
+    });
+  }
+  reloadListPermissionRequests() {
+    this.service.takeListRequests().subscribe((data) => {
+      this.listPermissionRepuests = Array.isArray(data) ? data : [];
     });
   }
 
@@ -135,29 +189,32 @@ trackById(index: number, item: CriteriaOfAEvaluate): string {
       this.listOfUsers = Array.isArray(data) ? data : [];
     });
   }
+
   reloadListCriterias() {
     this.service.takeListCriteria().subscribe((data) => {
+      console.log("aa" + this.evaluate_id);
       this.listOfCriterias = Array.isArray(data) ? data : [];
     });
   }
 
   reloadListCriteriaOfEvaluate() {
-    this.loading = true;
-    this.service.takeListCriteriaOfEvaluate(this.evaluate_id).subscribe(
-      data => {
-        this.listOfCriteriaOfAevaluate = data;
-        this.updateDisplayData();
-        this.loading = false;
-      },
-      error => {
-        console.error('Error loading logs:', error);
-        this.loading = false;
-      }
-    );
+    this.service.takeListCriteriaOfEvaluate(this.evaluate_id).subscribe((data) => {
+  this.listOfCriteriaOfAevaluate = Array.isArray(data) ? data : [];
+});
   }
 
-  updateDisplayData(): void {
-    this.listOfCurrentPageData = this.listOfCriteriaOfAevaluate; // Hoặc áp dụng phân trang nếu cần
+  ngOnInit(): void {
+    this.evaluate_id = this.route.snapshot.paramMap.get('id') || '';
+    this.reloadListRanks();
+    this.reloadListPermissionRequests();
+    this.reloadListUsers();
+    this.reloadListCriteriaOfEvaluate();
+    this.reloadListCriterias();
+    this.userCurrentId = this.authService.getCurrentUserId();
+  }
+
+  onCurrentPageDataChange(listOfCurrentPageData: readonly CriteriaOfAEvaluate[]): void {
+    this.listOfCurrentPageData = listOfCurrentPageData;
     this.refreshCheckedStatus();
   }
 
@@ -174,30 +231,18 @@ trackById(index: number, item: CriteriaOfAEvaluate): string {
     this.refreshCheckedStatus();
   }
 
-  onAllChecked(value: boolean): void {
-    this.listOfCurrentPageData.forEach(item => this.updateCheckedSet(item.id, value));
-    this.refreshCheckedStatus();
-  }
-
-  onCurrentPageDataChange($event: readonly CriteriaOfAEvaluate[]): void {
-    this.listOfCurrentPageData = $event;
+  onAllChecked(checked: boolean): void {
+    this.listOfCurrentPageData.forEach((item) => this.updateCheckedSet(item.id, checked));
     this.refreshCheckedStatus();
   }
 
   refreshCheckedStatus(): void {
-    this.checked = this.listOfCurrentPageData.every(item => this.setOfCheckedId.has(item.id));
-    this.indeterminate = this.listOfCurrentPageData.some(item => this.setOfCheckedId.has(item.id)) && !this.checked;
-  }
-  getCriteriaNameById(criteriaId: string): string {
-  if (!criteriaId) return 'Unknown Criteria';
-  const criteria = this.listOfCriterias.find(c => c.id === criteriaId);
-  return criteria ? criteria.name : 'Unknown Criteria';
+    this.checked = this.listOfCurrentPageData.every((item) => this.setOfCheckedId.has(item.id));
+    this.indeterminate = this.listOfCurrentPageData.some((item) => this.setOfCheckedId.has(item.id)) && !this.checked;
   }
 
-  ngOnInit(): void {
-    this.reloadListRanks();
-    this.reloadListUsers();
-    this.reloadListCriteriaOfEvaluate();
-    this.reloadListCriterias();
+  getCriteriaNameById(criteriaId: string): string {
+    const criteria = this.listOfCriterias.find(criteria => criteria.id === criteriaId);
+    return criteria ? criteria.name : '';
   }
 }

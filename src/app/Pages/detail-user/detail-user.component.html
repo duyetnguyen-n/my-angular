@@ -24,7 +24,7 @@
         </div>
         <div class="flex items-center">
           <i class='bx bxs-mars mr-2'></i>
-          <p class="italic">Điểm: {{UserInfo.points}} </p>
+          <p class="italic">Điểm: {{UserInfo.point}} </p>
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@
       </tr>
     </tbody>
   </nz-table>
-  <nz-table #filterTable [nzData]="listOfEvaluate" nzTableLayout="fixed" [nzShowPagination]="true" [nzPageSize]="5"
+  <nz-table *ngIf="canEditOrDelete()==false" #filterTable [nzData]="listOfEvaluate" nzTableLayout="fixed" [nzShowPagination]="true" [nzPageSize]="5"
     [nzFrontPagination]="true" [nzLoading]="loading" (nzPageIndexChange)="onPageIndexChange($event)">
     <thead>
       <tr>
@@ -107,28 +107,32 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let eva of listOfDisplayData">
-        <td>{{ eva.name | slice: 0:40 }}{{ eva.name.length > 50 ? '...' : '' }}</td>
-        <td>{{ getRankNameById(eva.rankId) }}</td>
-        <td>{{ eva.totalPointSubstraction }}</td>
-        <td>{{ eva.totalPointAddition }}</td>
-        <td>{{ eva.totalPoint }}</td>
-        <td>{{ eva.stt }}</td>
-        <td>{{ eva.from | date: 'short' }}</td>
-        <td>{{ eva.to | date: 'short'}}</td>
-        <td>
-          <div class="flex">
-            <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
-              (click)="FormSend(eva)">Gửi</a>
-            <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
-              (click)="openEditFormEvaluate(eva)">Sửa</a>
-            <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded"
-              (click)="showConfirmDelete(eva)">Xóa</a>
-          </div>
-        </td>
+      <ng-container *ngFor="let eva of listOfDisplayData">
+        <tr>
+          <td>{{ eva.name | slice: 0:40 }}{{ eva.name.length > 50 ? '...' : '' }}</td>
+          <td>{{ getRankNameById(eva.rankId) }}</td>
+          <td>{{ eva.totalPointSubstraction }}</td>
+          <td>{{ eva.totalPointAddition }}</td>
+          <td>{{ eva.totalPoint }}</td>
+          <td>{{ eva.stt }}</td>
+          <td>{{ eva.from | date: 'short' }}</td>
+          <td>{{ eva.to | date: 'short'}}</td>
+          <td>
+            <div class="flex">
+              <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded mr-2"
+                (click)="openEditFormEvaluate(eva)">Sửa</a>
+              <a class="flex items-center but-add hover:bg-sky-200 text-white px-3 rounded"
+                (click)="showConfirmDelete(eva)">Xóa</a>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="9">
+            <p class="h-fit text-red-600 italic">{{ getRequestsFromEvaluateId(eva.id).status }}...</p>
+          </td>
+        </tr>
+      </ng-container>
 
-      </tr>
-    <p>Chỗ ghi mấy lưu ý !!!</p>
     </tbody>
 
   </nz-table>
